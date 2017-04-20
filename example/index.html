@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Blueprint 3D - Example</title>
+    <title>Blueprint 2D</title>
 
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/example.css" rel="stylesheet">
@@ -12,368 +12,407 @@
 
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.js"></script>
-    
+
     <script src="js/items.js"></script>
     <script src="js/example.js"></script>
-  </head>
+</head>
 
-  <body>
-     <!---CONTROL-NAV-->
-     <div class="container">
-       <div class="row main-row" id="controls-top" style="padding-top:10px; text-align: center;">
-           <div class="col-xs-4" style="text-align: center;">
-             <button id="save" class="btn btn-sm btn-default">
+<body>
+    <!---CONTROL-NAV-->
+    <div class="container">
+        <div class="row main-row" id="controls-top" style="padding-top:10px; text-align: center;">
+            <div class="col-xs-4" style="text-align: center;">
+                <button id="save" class="btn btn-sm btn-default">
                 <span class="glyphicon glyphicon-floppy-disk"></span>
                 Save
               </button>
-              <button id="load" class="btn btn-sm btn-default">
+                <button id="load" class="btn btn-sm btn-default">
                 <span class="glyphicon glyphicon-upload"></span>
                 Load
               </button>
-              <button id="new" class="btn btn-sm btn-default">
+                <button id="new" class="btn btn-sm btn-default">
                 <span class="glyphicon glyphicon-new-window"></span>
                 New
               </button>
-              
-           </div> 
 
-           <div class="col-xs-4" style="text-align: center;">
-               <input type="file" id="getval" class="btn btn-sm btn-default" style="width:80%; margin:auto;">
-               
-           </div>
+            </div>
 
-           <div class="col-xs-4" style="text-align: center;"> 
-               <button id="move" class="btn btn-sm btn-default">
+            <div class="col-xs-3" style="text-align: center;">
+                <input type="file" id="getval" class="btn btn-sm btn-default" style="width:80%; margin:auto;">
+
+            </div>
+
+            <div class="col-xs-5" style="text-align: center;">
+
+                <!-- Toggle Canvas button -->
+                <button onclick="myFunction()" class="btn btn-sm btn-default">
+                  Toggle Canvas
+                  </button>
+                <!-- Toggle Canvas code -->
+
+                <script>
+                    function myFunction() {
+                        var x = document.getElementById('floorplanner-canvas');
+                        if (x.style.display === 'none') {
+                            x.style.display = 'block';
+                        } else {
+                            x.style.display = 'none';
+                        }
+                    }
+                </script>
+
+
+                <!-- End of Toggle -->
+                <button id="move" class="btn btn-sm btn-default">
                 <span class="glyphicon glyphicon-move"></span>
                 Move Walls
               </button>
-              <button id="draw" class="btn btn-sm btn-default">
+                <button id="draw" class="btn btn-sm btn-default">
                 <span class="glyphicon glyphicon-pencil"></span>
                 Draw Walls
               </button>
-              <button id="delete" class="btn btn-sm btn-default">
+                <button id="delete" class="btn btn-sm btn-default">
                 <span class="glyphicon glyphicon-remove"></span>
                 Delete Walls
               </button>
-             
-           </div>
-             
 
-          </div>   
-          <hr>
+            </div>
 
-       </div>
-     
+
+        </div>
+        <hr>
+
+    </div>
+
     <div class="container-fluid">
-      <div class="row main-row">
-        <!-- Left Column -->
-        <div class="col-xs-2 sidebar" style="padding:0 ;">
-          
-
-          <!-- Main Navigation -->
-          <ul class="nav nav-sidebar">
-            <li id="floorplan_tab" style="text-align: center; font-size: 20px;">
-              Edit Floorplan
-            </li>  
-          </ul>
-          <hr/>
-
-          
-          <!-- Context Menu -->
+        <div class="row main-row">
+            <!-- Left Column -->
+            <div class="col-xs-2 sidebar" style="padding:0 ;">
 
 
-          
+                <!-- Main Navigation -->
+                <ul class="nav nav-sidebar">
+                    <li id="floorplan_tab" style="text-align: center; font-size: 20px;">
+                        Edit Floorplan
+                    </li>
+                </ul>
+                <hr/>
+
+
+                <!-- Context Menu -->
 
 
 
-          
 
 
 
-          <div id="context-menu">
-            <div style="margin: 0 20px">
-              <span id="context-menu-name" class="lead"></span>
-              <br /><br />
-              <button class="btn btn-block btn-danger" id="context-menu-delete">
+
+
+
+
+                <div id="context-menu">
+                    <div style="margin: 0 20px">
+                        <span id="context-menu-name" class="lead"></span>
+                        <br /><br />
+                        <button class="btn btn-block btn-danger" id="context-menu-delete">
                 <span class="glyphicon glyphicon-trash"></span> 
                 Delete Item
               </button>
-            <br />
-            <div class="panel panel-default">
-              <div class="panel-heading">Adjust Size</div>
-              <div class="panel-body" style="color: #333333">
+                        <br />
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Adjust Size</div>
+                            <div class="panel-body" style="color: #333333">
 
-                <div class="form form-horizontal" class="lead">
-                  <div class="form-group">
-                    <label class="col-sm-5 control-label">
+                                <div class="form form-horizontal" class="lead">
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">
                        Width
                     </label>
-                    <div class="col-sm-6">
-                      <input type="number" class="form-control" id="item-width">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-5 control-label">
+                                        <div class="col-sm-6">
+                                            <input type="number" class="form-control" id="item-width">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">
                       Depth 
                     </label>
-                    <div class="col-sm-6">
-                      <input type="number" class="form-control" id="item-depth">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-5 control-label">
+                                        <div class="col-sm-6">
+                                            <input type="number" class="form-control" id="item-depth">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">
                       Height
                     </label>
-                    <div class="col-sm-6">
-                      <input type="number" class="form-control" id="item-height">
+                                        <div class="col-sm-6">
+                                            <input type="number" class="form-control" id="item-height">
+                                        </div>
+                                    </div>
+                                </div>
+                                <small><span class="text-muted">Measurements in inches.</span></small>
+                            </div>
+                        </div>
+
+                        <label><input type="checkbox" id="fixed" /> Lock in place</label>
+                        <br /><br />
                     </div>
-                  </div>
                 </div>
-                <small><span class="text-muted">Measurements in inches.</span></small>
-              </div>
+
+
+                <!-- Floor textures -->
+                <div id="floorTexturesDiv" style="display:none; padding: 0 20px">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Adjust Floor</div>
+                        <div class="panel-body" style="color: #333333">
+
+                            <div class="col-sm-6" style="padding: 3px">
+                                <a href="#" class="thumbnail texture-select-thumbnail" texture-url="rooms/textures/light_fine_wood.jpg" texture-stretch="false" texture-scale="300">
+                                    <img alt="Thumbnail light fine wood" src="rooms/thumbnails/thumbnail_light_fine_wood.jpg" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!--2D items-->
+                <div id="floorplan-2d-items" style="display:block; padding:0; font-size: 12px; text-align: center; margin: 0 ; border-bottom: 1.5px solid #444;">
+
+                    <div class="btn-primary" data-toggle="collapse" data-target="#panel-2d-items" style="padding:10px ; margin:0 ; font-size: 14px;width: 100%; cursor:pointer;"> 2D Items <span style="float:right;" class="glyphicon glyphicon-chevron-down pull-down"></span></div>
+                    <div class="panel panel-default collapse" id="panel-2d-items">
+                        <div class="panel-heading">Pick item you want to use</div>
+                        <div class="panel-body" style="color: #333333">
+
+                            <div class="col-sm-4" style="padding: 3px; text-align: center;">
+                                <a href="#" class="thumbnail texture-select-thumbnail">
+                                    <img alt="Thumbnail Door" src="2d-icons/door.png" />
+                                    <label>Door</label>
+                                </a>
+                            </div>
+
+                            <div class="col-sm-4" style="padding: 3px; text-align: center;">
+                                <a href="#" class="thumbnail">
+                                    <img alt="Thumbnail toilet" src="2d-icons/toilet.png" />
+                                    <label>Toilet</label>
+                                </a>
+                            </div>
+
+                            <div class="col-sm-4" style="padding: 3px; text-align: center;">
+                                <a href="#" class="thumbnail">
+                                    <img alt="Thumbnail Sink" src="2d-icons/sink.png" />
+                                    <label>Sink</label>
+                                </a>
+                            </div>
+
+                            <div class="col-sm-4" style="padding: 3px; text-align: center;">
+                                <a href="#" class="thumbnail">
+                                    <img alt="Thumbnail Gas-table" src="2d-icons/gas-table.png" />
+                                    <label>Gas table</label>
+                                </a>
+                            </div>
+
+                            <div class="col-sm-4" style="padding: 3px; text-align: center;">
+                                <a href="#" class="thumbnail">
+                                    <img alt="Thumbnail bath-tabs" src="2d-icons/bath-tabs.png" />
+                                    <label>Bath tab</label>
+                                </a>
+                            </div>
+
+                            <div class="col-sm-4" style="padding: 3px; text-align: center;">
+                                <a href="#" class="thumbnail">
+                                    <img alt="Thumbnail Column" src="2d-icons/column.png" />
+                                    <label>Column</label>
+                                </a>
+                            </div>
+
+                            <div class="col-sm-4" style="padding: 3px; text-align: center;">
+                                <a href="#" class="thumbnail">
+                                    <img alt="Thumbnail washer-machine" src="2d-icons/washer-machine.png" />
+                                    <label>Washer machine</label>
+                                </a>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Lines Menu type of lines -->
+
+                <div id="Wall" style="display:block; padding:0; font-size: 12px; text-align: center; border-bottom:1.5px solid #444;">
+
+                    <div class="btn-primary" data-toggle="collapse" data-target="#panel-walls" style="padding:10px; font-size: 14px;width: 100%; cursor:pointer;">Type of lines <span style="float:right;" class="glyphicon glyphicon-chevron-down pull-down"></span></div>
+                    <div class="panel panel-default collapse" id="panel-walls">
+                        <div class="panel-heading">Pick type of line to draw walls</div>
+                        <div class="panel-body" style="color: #333333">
+
+                            <div class="col-sm-4" style="padding: 3px; text-align: center;">
+                                <a href="#" class="thumbnail">
+                                    <img alt="line" src="Type-of-lines/line.png" />
+                                    <label>Thin line</label>
+                                </a>
+                            </div>
+
+                            <div class="col-sm-4" style="padding: 3px; text-align: center;">
+                                <a href="#" class="thumbnail">
+                                    <img alt="line-bold" src="Type-of-lines/line-bold.png" />
+                                    <label>Solid line</label>
+                                </a>
+                            </div>
+
+                            <div class="col-sm-4" style="padding: 3px; text-align: center;">
+                                <a href="#" class="thumbnail">
+                                    <img alt="line-window" src="Type-of-lines/line-window.png" />
+                                    <label>Window</label>
+                                </a>
+                            </div>
+
+                            <div class="col-sm-4" style="padding: 3px; text-align: center;">
+                                <a href="#" class="thumbnail">
+                                    <img alt="line-border" src="Type-of-lines/line-border.png" />
+                                    <label>Hollow line</label>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div id="zoom-bar" style="display:block; padding:0; font-size: 14px; text-align: center; ">
+
+
+                    Zoom bar
+                    <input type="range" id="sliderbar" min="1" max="500" step="1" style="width:80%; margin:auto;">
+
+
+                </div>
+
+
+
+
+
+                <!-- Wall Textures -->
+                <div id="wallTextures" style="display:none; padding: 0 20px">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Adjust Wall</div>
+                        <div class="panel-body" style="color: #333333">
+                            <div class="col-sm-6" style="padding: 3px">
+                                <a href="#" class="thumbnail texture-select-thumbnail" texture-url="rooms/textures/marbletiles.jpg" texture-stretch="false" texture-scale="300">
+                                    <img alt="Thumbnail marbletiles" src="rooms/thumbnails/thumbnail_marbletiles.jpg" />
+                                </a>
+                            </div>
+                            <div class="col-sm-6" style="padding: 3px">
+                                <a href="#" class="thumbnail texture-select-thumbnail" texture-url="rooms/textures/wallmap_yellow.png" texture-stretch="true" texture-scale="">
+                                    <img alt="Thumbnail wallmap yellow" src="rooms/thumbnails/thumbnail_wallmap_yellow.png" />
+                                </a>
+                            </div>
+                            <div class="col-sm-6" style="padding: 3px">
+                                <a href="#" class="thumbnail texture-select-thumbnail" texture-url="rooms/textures/light_brick.jpg" texture-stretch="false" texture-scale="100">
+                                    <img alt="Thumbnail light brick" src="rooms/thumbnails/thumbnail_light_brick.jpg" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <label><input type="checkbox" id="fixed" /> Lock in place</label>
-            <br /><br />
-            </div>
-          </div>
+            <!-- Right Column -->
+            <div class="col-xs-10 main">
 
-         
-          <!-- Floor textures -->
-          <div id="floorTexturesDiv" style="display:none; padding: 0 20px">
-            <div class="panel panel-default">
-              <div class="panel-heading">Adjust Floor</div>
-              <div class="panel-body" style="color: #333333">
+                <!-- 3D Viewer -->
+                <div id="viewer">
 
-                <div class="col-sm-6" style="padding: 3px">
-                  <a href="#" class="thumbnail texture-select-thumbnail" texture-url="rooms/textures/light_fine_wood.jpg" texture-stretch="false" texture-scale="300">
-                    <img alt="Thumbnail light fine wood" src="rooms/thumbnails/thumbnail_light_fine_wood.jpg" />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-
-
-          <!--2D items-->
-           <div id="floorplan-2d-items" style="display:block; padding:0; font-size: 12px; text-align: center; margin: 0 ; border-bottom: 1.5px solid #444;">
-
-           <div class="btn-primary"   data-toggle="collapse" data-target="#panel-2d-items" style="padding:10px ; margin:0 ; font-size: 14px;width: 100%; cursor:pointer;"> 2D Items <span style="float:right;" class="glyphicon glyphicon-chevron-down pull-down"></span></div>
-            <div class="panel panel-default collapse" id="panel-2d-items" >
-              <div class="panel-heading">Pick item you want to use</div>
-              <div class="panel-body" style="color: #333333">
-
-                <div class="col-sm-4" style="padding: 3px; text-align: center;">
-                  <a href="#" class="thumbnail texture-select-thumbnail">
-                    <img alt="Thumbnail Door" src="2d-icons/door.png" />
-                    <label>Door</label>
-                  </a>
-                </div>
-
-                <div class="col-sm-4" style="padding: 3px; text-align: center;">
-                  <a href="#" class="thumbnail">
-                    <img alt="Thumbnail toilet" src="2d-icons/toilet.png" />
-                     <label>Toilet</label>
-                  </a>
-                </div>
-
-                <div class="col-sm-4" style="padding: 3px; text-align: center;">
-                  <a href="#" class="thumbnail">
-                    <img alt="Thumbnail Sink" src="2d-icons/sink.png" />
-                     <label>Sink</label>
-                  </a>
-                </div>
-
-                <div class="col-sm-4" style="padding: 3px; text-align: center;">
-                  <a href="#" class="thumbnail">
-                    <img alt="Thumbnail Gas-table" src="2d-icons/gas-table.png" />
-                     <label>Gas table</label>
-                  </a>
-                </div>
-
-                <div class="col-sm-4" style="padding: 3px; text-align: center;">
-                  <a href="#" class="thumbnail">
-                    <img alt="Thumbnail bath-tabs" src="2d-icons/bath-tabs.png" />
-                     <label>Bath tab</label>
-                  </a>
-                </div>
-
-                <div class="col-sm-4" style="padding: 3px; text-align: center;">
-                  <a href="#" class="thumbnail">
-                    <img alt="Thumbnail Column" src="2d-icons/column.png" />
-                     <label>Column</label>
-                  </a>
-                </div>
-
-                <div class="col-sm-4" style="padding: 3px; text-align: center;">
-                  <a href="#" class="thumbnail">
-                    <img alt="Thumbnail washer-machine" src="2d-icons/washer-machine.png" />
-                     <label>Washer machine</label> 
-                  </a>
-                </div>
-
-               
-              </div>
-            </div>
-          </div>
-          <!-- Lines Menu type of lines -->
-
-          <div id="Wall" style="display:block; padding:0; font-size: 12px; text-align: center; border-bottom:1.5px solid #444;">
-
-           <div class="btn-primary"   data-toggle="collapse" data-target="#panel-walls" style="padding:10px; font-size: 14px;width: 100%; cursor:pointer;">Type of lines <span style="float:right;" class="glyphicon glyphicon-chevron-down pull-down"></span></div>
-            <div class="panel panel-default collapse" id="panel-walls">
-              <div class="panel-heading">Pick type of line to draw walls</div>
-              <div class="panel-body" style="color: #333333">
-
-                <div class="col-sm-4" style="padding: 3px; text-align: center;">
-                  <a href="#" class="thumbnail">
-                    <img alt="line" src="Type-of-lines/line.png" />
-                    <label>Thin line</label>
-                  </a>
-                </div>
-
-                <div class="col-sm-4" style="padding: 3px; text-align: center;">
-                  <a href="#" class="thumbnail">
-                    <img alt="line-bold" src="Type-of-lines/line-bold.png" />
-                     <label>Solid line</label>
-                  </a>
-                </div>
-
-                <div class="col-sm-4" style="padding: 3px; text-align: center;">
-                  <a href="#" class="thumbnail">
-                    <img alt="line-window" src="Type-of-lines/line-window.png" />
-                     <label>Window</label>
-                  </a>
-                </div>
-
-                <div class="col-sm-4" style="padding: 3px; text-align: center;">
-                  <a href="#" class="thumbnail">
-                    <img alt="line-border" src="Type-of-lines/line-border.png" />
-                     <label>Hollow line</label>
-                  </a>
-                </div>
-               
-              </div>
-            </div>
-          </div>
-
-          <hr>
-
-          <div id="zoom-bar" style="display:block; padding:0; font-size: 14px; text-align: center; ">
-
-                
-                Zoom bar
-                <input type="range" id="sliderbar" min="1" max="500" step="1" style="width:80%; margin:auto;">
-
-               
-              </div>
-            
-          
-
-
-          
-          <!-- Wall Textures -->
-          <div id="wallTextures" style="display:none; padding: 0 20px">
-            <div class="panel panel-default">
-              <div class="panel-heading">Adjust Wall</div>
-              <div class="panel-body" style="color: #333333">
-                <div class="col-sm-6" style="padding: 3px">
-                  <a href="#" class="thumbnail texture-select-thumbnail" texture-url="rooms/textures/marbletiles.jpg" texture-stretch="false" texture-scale="300">
-                    <img alt="Thumbnail marbletiles" src="rooms/thumbnails/thumbnail_marbletiles.jpg" />
-                  </a>
-                </div>
-                <div class="col-sm-6" style="padding: 3px">
-                  <a href="#" class="thumbnail texture-select-thumbnail" texture-url="rooms/textures/wallmap_yellow.png" texture-stretch="true" texture-scale="">
-                    <img alt="Thumbnail wallmap yellow" src="rooms/thumbnails/thumbnail_wallmap_yellow.png" />
-                  </a>
-                </div>
-                <div class="col-sm-6" style="padding: 3px">
-                  <a href="#" class="thumbnail texture-select-thumbnail" texture-url="rooms/textures/light_brick.jpg" texture-stretch="false" texture-scale="100">
-                    <img alt="Thumbnail light brick" src="rooms/thumbnails/thumbnail_light_brick.jpg" />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Column -->
-        <div class="col-xs-10 main">
-
-          <!-- 3D Viewer -->
-          <div id="viewer">
-
-            <div id="main-controls">
-              <a href="#" class="btn btn-default btn-sm" id="new">
+                    <div id="main-controls">
+                        <a href="#" class="btn btn-default btn-sm" id="new">
                 New Plan
               </a>
-              <a href="#" class="btn btn-default btn-sm" id="saveFile">
+                        <a href="#" class="btn btn-default btn-sm" id="saveFile">
                 Save Plan
               </a>
-              <a class="btn btn-sm btn-default btn-file">
-               <input type="file" class="hidden-input" id="loadFile">
+                        <a class="btn btn-sm btn-default btn-file">
+                            <input type="file" class="hidden-input" id="loadFile"> Load Plan
+                        </a>
+                    </div>
 
-               Load Plan
-              </a>
-            </div>
+                    <div id="camera-controls">
+                        <a href="#" class="btn btn-default bottom" id="zoom-out">
+                            <span class="glyphicon glyphicon-zoom-out"></span>
+                        </a>
+                        <a href="#" class="btn btn-default bottom" id="reset-view">
+                            <span class="glyphicon glyphicon glyphicon-home"></span>
+                        </a>
+                        <a href="#" class="btn btn-default bottom" id="zoom-in">
+                            <span class="glyphicon glyphicon-zoom-in"></span>
+                        </a>
 
-            <div id="camera-controls">
-              <a href="#" class="btn btn-default bottom" id="zoom-out">
-                <span class="glyphicon glyphicon-zoom-out"></span>
-              </a>
-              <a href="#" class="btn btn-default bottom" id="reset-view">
-                <span class="glyphicon glyphicon glyphicon-home"></span>
-              </a>
-              <a href="#" class="btn btn-default bottom" id="zoom-in">
-                <span class="glyphicon glyphicon-zoom-in"></span>
-              </a>
-              
-              <span>&nbsp;</span>
+                        <span>&nbsp;</span>
 
-              <a class="btn btn-default bottom" href="#" id="move-left" >
-                <span class="glyphicon glyphicon-arrow-left"></span>
-              </a>
-              <span class="btn-group-vertical">
+                        <a class="btn btn-default bottom" href="#" id="move-left">
+                            <span class="glyphicon glyphicon-arrow-left"></span>
+                        </a>
+                        <span class="btn-group-vertical">
                 <a class="btn btn-default" href="#" id="move-up">
                   <span class="glyphicon glyphicon-arrow-up"></span>
-                </a>
-                <a class="btn btn-default" href="#" id="move-down">
-                  <span class="glyphicon glyphicon-arrow-down"></span>
-                </a>
-              </span>
-              <a class="btn btn-default bottom" href="#" id="move-right" >
-                <span class="glyphicon glyphicon-arrow-right"></span>
-              </a>
-            </div>
+                        </a>
+                        <a class="btn btn-default" href="#" id="move-down">
+                            <span class="glyphicon glyphicon-arrow-down"></span>
+                        </a>
+                        </span>
+                        <a class="btn btn-default bottom" href="#" id="move-right">
+                            <span class="glyphicon glyphicon-arrow-right"></span>
+                        </a>
+                    </div>
 
-            <div id="loading-modal">
-              <h1>Loading...</h1>  
-            </div>
-          </div>
+                    <div id="loading-modal">
+                        <h1>Loading...</h1>
+                    </div>
+                </div>
 
-          <!-- 2D Floorplanner -->
-          <div id="floorplanner">
-            <canvas id="floorplanner-canvas"></canvas>
-           
-            <div id="draw-walls-hint">
-              Press the "Esc" key to stop drawing walls
-            </div>
-          </div>
+                <!-- 2D Floorplanner -->
+                <div id="floorplanner">
+                    <canvas id="floorplanner-canvas" style="position: absolute; z-index: 1;"></canvas>
 
-          <!-- Add Items -->
-          <div id="add-items">
-            <div class="row" id="items-wrapper">
 
-              <!-- Items added here by items.js -->
+                    <!--Umetanje Slike-->
+                    <canvas id='clock' style="width: 100%; height: 100%;"></canvas>
+
+                    <script>
+                        document.getElementById('getval').addEventListener('change', readURL, true);
+
+                        function readURL() {
+                            var file = document.getElementById("getval").files[0];
+                            var reader = new FileReader();
+                            reader.onloadend = function() {
+                                document.getElementById('clock').style.backgroundImage = "url(" + reader.result + ")";
+                            }
+                            if (file) {
+                                reader.readAsDataURL(file);
+                            } else {}
+                        }
+                    </script>
+                    <!--Kraj Umetanja-->
+
+                    <div id="draw-walls-hint">
+                        Press the "Esc" key to stop drawing walls
+                    </div>
+                </div>
+
+                <!-- Add Items -->
+                <div id="add-items">
+                    <div class="row" id="items-wrapper">
+
+                        <!-- Items added here by items.js -->
+                    </div>
+                </div>
+
             </div>
-          </div>
-      
+            <!-- End Right Column -->
         </div>
-        <!-- End Right Column -->
-      </div>
     </div>
 
-  </body>
+</body>
+
 </html>

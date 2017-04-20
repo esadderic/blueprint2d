@@ -2683,7 +2683,7 @@ var BP3D;
                     // dont draw labels on walls this short
                     return;
                 }
-                this.context.globalAlpha = 0.5;
+                this.context.globalAlpha = 0.6;
                 this.context.font = "normal 12px Arial";
                 this.context.fillStyle = "#000000";
                 this.context.textBaseline = "middle";
