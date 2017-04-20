@@ -1,10 +1,11 @@
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Core;
-    (function(Core) {
+    (function (Core) {
         /** Collection of utility functions. */
-        var Utils = (function() {
-            function Utils() {}
+        var Utils = (function () {
+            function Utils() {
+            }
             /** Determines the distance of a point from a line.
              * @param x Point's x coordinate.
              * @param y Point's y coordinate.
@@ -14,7 +15,7 @@ var BP3D;
              * @param y2 Line-Point 2's y coordinate.
              * @returns The distance.
              */
-            Utils.pointDistanceFromLine = function(x, y, x1, y1, x2, y2) {
+            Utils.pointDistanceFromLine = function (x, y, x1, y1, x2, y2) {
                 var tPoint = Utils.closestPointOnLine(x, y, x1, y1, x2, y2);
                 var tDx = x - tPoint.x;
                 var tDy = y - tPoint.y;
@@ -29,7 +30,7 @@ var BP3D;
              * @param y2 Line-Point 2's y coordinate.
              * @returns The point.
              */
-            Utils.closestPointOnLine = function(x, y, x1, y1, x2, y2) {
+            Utils.closestPointOnLine = function (x, y, x1, y1, x2, y2) {
                 // Inspired by: http://stackoverflow.com/a/6853926
                 var tA = x - x1;
                 var tB = y - y1;
@@ -42,10 +43,12 @@ var BP3D;
                 if (tParam < 0 || (x1 == x2 && y1 == y2)) {
                     tXx = x1;
                     tYy = y1;
-                } else if (tParam > 1) {
+                }
+                else if (tParam > 1) {
                     tXx = x2;
                     tYy = y2;
-                } else {
+                }
+                else {
                     tXx = x1 + tParam * tC;
                     tYy = y1 + tParam * tD;
                 }
@@ -61,21 +64,21 @@ var BP3D;
              * @param y2 Y part of second point.
              * @returns The distance.
              */
-            Utils.distance = function(x1, y1, x2, y2) {
+            Utils.distance = function (x1, y1, x2, y2) {
                 return Math.sqrt(Math.pow(x2 - x1, 2) +
                     Math.pow(y2 - y1, 2));
             };
             /**  Gets the angle between 0,0 -> x1,y1 and 0,0 -> x2,y2 (-pi to pi)
              * @returns The angle.
              */
-            Utils.angle = function(x1, y1, x2, y2) {
+            Utils.angle = function (x1, y1, x2, y2) {
                 var tDot = x1 * x2 + y1 * y2;
                 var tDet = x1 * y2 - y1 * x2;
                 var tAngle = -Math.atan2(tDet, tDot);
                 return tAngle;
             };
             /** shifts angle to be 0 to 2pi */
-            Utils.angle2pi = function(x1, y1, x2, y2) {
+            Utils.angle2pi = function (x1, y1, x2, y2) {
                 var tTheta = Utils.angle(x1, y1, x2, y2);
                 if (tTheta < 0) {
                     tTheta += 2 * Math.PI;
@@ -86,15 +89,15 @@ var BP3D;
              * @param points Is array of points with x,y attributes
              * @returns True if clockwise.
              */
-            Utils.isClockwise = function(points) {
+            Utils.isClockwise = function (points) {
                 // make positive
-                var tSubX = Math.min(0, Math.min.apply(null, Utils.map(points, function(p) {
+                var tSubX = Math.min(0, Math.min.apply(null, Utils.map(points, function (p) {
                     return p.x;
                 })));
-                var tSubY = Math.min(0, Math.min.apply(null, Utils.map(points, function(p) {
+                var tSubY = Math.min(0, Math.min.apply(null, Utils.map(points, function (p) {
                     return p.x;
                 })));
-                var tNewPoints = Utils.map(points, function(p) {
+                var tNewPoints = Utils.map(points, function (p) {
                     return {
                         x: p.x - tSubX,
                         y: p.y - tSubY
@@ -108,7 +111,8 @@ var BP3D;
                     var tC2;
                     if (tI == tNewPoints.length - 1) {
                         tC2 = tNewPoints[0];
-                    } else {
+                    }
+                    else {
                         tC2 = tNewPoints[tI + 1];
                     }
                     tSum += (tC2.x - tC1.x) * (tC2.y + tC1.y);
@@ -118,8 +122,8 @@ var BP3D;
             /** Creates a Guid.
              * @returns A new Guid.
              */
-            Utils.guid = function() {
-                var tS4 = function() {
+            Utils.guid = function () {
+                var tS4 = function () {
                     return Math.floor((1 + Math.random()) * 0x10000)
                         .toString(16)
                         .substring(1);
@@ -128,13 +132,13 @@ var BP3D;
                     tS4() + '-' + tS4() + tS4() + tS4();
             };
             /** both arguments are arrays of corners with x,y attributes */
-            Utils.polygonPolygonIntersect = function(firstCorners, secondCorners) {
+            Utils.polygonPolygonIntersect = function (firstCorners, secondCorners) {
                 for (var tI = 0; tI < firstCorners.length; tI++) {
-                    var tFirstCorner = firstCorners[tI],
-                        tSecondCorner;
+                    var tFirstCorner = firstCorners[tI], tSecondCorner;
                     if (tI == firstCorners.length - 1) {
                         tSecondCorner = firstCorners[0];
-                    } else {
+                    }
+                    else {
                         tSecondCorner = firstCorners[tI + 1];
                     }
                     if (Utils.linePolygonIntersect(tFirstCorner.x, tFirstCorner.y, tSecondCorner.x, tSecondCorner.y, secondCorners)) {
@@ -144,13 +148,13 @@ var BP3D;
                 return false;
             };
             /** Corners is an array of points with x,y attributes */
-            Utils.linePolygonIntersect = function(x1, y1, x2, y2, corners) {
+            Utils.linePolygonIntersect = function (x1, y1, x2, y2, corners) {
                 for (var tI = 0; tI < corners.length; tI++) {
-                    var tFirstCorner = corners[tI],
-                        tSecondCorner;
+                    var tFirstCorner = corners[tI], tSecondCorner;
                     if (tI == corners.length - 1) {
                         tSecondCorner = corners[0];
-                    } else {
+                    }
+                    else {
                         tSecondCorner = corners[tI + 1];
                     }
                     if (Utils.lineLineIntersect(x1, y1, x2, y2, tFirstCorner.x, tFirstCorner.y, tSecondCorner.x, tSecondCorner.y)) {
@@ -160,20 +164,12 @@ var BP3D;
                 return false;
             };
             /** */
-            Utils.lineLineIntersect = function(x1, y1, x2, y2, x3, y3, x4, y4) {
+            Utils.lineLineIntersect = function (x1, y1, x2, y2, x3, y3, x4, y4) {
                 function tCCW(p1, p2, p3) {
-                    var tA = p1.x,
-                        tB = p1.y,
-                        tC = p2.x,
-                        tD = p2.y,
-                        tE = p3.x,
-                        tF = p3.y;
+                    var tA = p1.x, tB = p1.y, tC = p2.x, tD = p2.y, tE = p3.x, tF = p3.y;
                     return (tF - tB) * (tC - tA) > (tD - tB) * (tE - tA);
                 }
-                var tP1 = { x: x1, y: y1 },
-                    tP2 = { x: x2, y: y2 },
-                    tP3 = { x: x3, y: y3 },
-                    tP4 = { x: x4, y: y4 };
+                var tP1 = { x: x1, y: y1 }, tP2 = { x: x2, y: y2 }, tP3 = { x: x3, y: y3 }, tP4 = { x: x4, y: y4 };
                 return (tCCW(tP1, tP3, tP4) != tCCW(tP2, tP3, tP4)) && (tCCW(tP1, tP2, tP3) != tCCW(tP1, tP2, tP4));
             };
             /**
@@ -181,12 +177,11 @@ var BP3D;
               @param startX X start coord for raycast
               @param startY Y start coord for raycast
             */
-            Utils.pointInPolygon = function(x, y, corners, startX, startY) {
+            Utils.pointInPolygon = function (x, y, corners, startX, startY) {
                 startX = startX || 0;
                 startY = startY || 0;
                 //ensure that point(startX, startY) is outside the polygon consists of corners
-                var tMinX = 0,
-                    tMinY = 0;
+                var tMinX = 0, tMinY = 0;
                 if (startX === undefined || startY === undefined) {
                     for (var tI = 0; tI < corners.length; tI++) {
                         tMinX = Math.min(tMinX, corners[tI].x);
@@ -197,11 +192,11 @@ var BP3D;
                 }
                 var tIntersects = 0;
                 for (var tI = 0; tI < corners.length; tI++) {
-                    var tFirstCorner = corners[tI],
-                        tSecondCorner;
+                    var tFirstCorner = corners[tI], tSecondCorner;
                     if (tI == corners.length - 1) {
                         tSecondCorner = corners[0];
-                    } else {
+                    }
+                    else {
                         tSecondCorner = corners[tI + 1];
                     }
                     if (Utils.lineLineIntersect(startX, startY, x, y, tFirstCorner.x, tFirstCorner.y, tSecondCorner.x, tSecondCorner.y)) {
@@ -212,7 +207,7 @@ var BP3D;
                 return ((tIntersects % 2) == 1);
             };
             /** Checks if all corners of insideCorners are inside the polygon described by outsideCorners */
-            Utils.polygonInsidePolygon = function(insideCorners, outsideCorners, startX, startY) {
+            Utils.polygonInsidePolygon = function (insideCorners, outsideCorners, startX, startY) {
                 startX = startX || 0;
                 startY = startY || 0;
                 for (var tI = 0; tI < insideCorners.length; tI++) {
@@ -223,7 +218,7 @@ var BP3D;
                 return true;
             };
             /** Checks if any corners of firstCorners is inside the polygon described by secondCorners */
-            Utils.polygonOutsidePolygon = function(insideCorners, outsideCorners, startX, startY) {
+            Utils.polygonOutsidePolygon = function (insideCorners, outsideCorners, startX, startY) {
                 startX = startX || 0;
                 startY = startY || 0;
                 for (var tI = 0; tI < insideCorners.length; tI++) {
@@ -234,27 +229,27 @@ var BP3D;
                 return true;
             };
             // arrays
-            Utils.forEach = function(array, action) {
+            Utils.forEach = function (array, action) {
                 for (var tI = 0; tI < array.length; tI++) {
                     action(array[tI]);
                 }
             };
-            Utils.forEachIndexed = function(array, action) {
+            Utils.forEachIndexed = function (array, action) {
                 for (var tI = 0; tI < array.length; tI++) {
                     action(tI, array[tI]);
                 }
             };
-            Utils.map = function(array, func) {
+            Utils.map = function (array, func) {
                 var tResult = [];
-                array.forEach(function(element) {
+                array.forEach(function (element) {
                     tResult.push(func(element));
                 });
                 return tResult;
             };
             /** Remove elements in array if func(element) returns true */
-            Utils.removeIf = function(array, func) {
+            Utils.removeIf = function (array, func) {
                 var tResult = [];
-                array.forEach(function(element) {
+                array.forEach(function (element) {
                     if (!func(element)) {
                         tResult.push(element);
                     }
@@ -262,7 +257,7 @@ var BP3D;
                 return tResult;
             };
             /** Shift the items in an array by shift (positive integer) */
-            Utils.cycle = function(arr, shift) {
+            Utils.cycle = function (arr, shift) {
                 var tReturn = arr.slice(0);
                 for (var tI = 0; tI < shift; tI++) {
                     var tmp = tReturn.shift();
@@ -271,7 +266,7 @@ var BP3D;
                 return tReturn;
             };
             /** Returns in the unique elemnts in arr */
-            Utils.unique = function(arr, hashFunc) {
+            Utils.unique = function (arr, hashFunc) {
                 var tResults = [];
                 var tMap = {};
                 for (var tI = 0; tI < arr.length; tI++) {
@@ -283,7 +278,7 @@ var BP3D;
                 return tResults;
             };
             /** Remove value from array, if it is present */
-            Utils.removeValue = function(array, value) {
+            Utils.removeValue = function (array, value) {
                 for (var tI = array.length - 1; tI >= 0; tI--) {
                     if (array[tI] === value) {
                         array.splice(tI, 1);
@@ -291,13 +286,13 @@ var BP3D;
                 }
             };
             /** Subtracts the elements in subArray from array */
-            Utils.subtract = function(array, subArray) {
-                return Utils.removeIf(array, function(el) {
+            Utils.subtract = function (array, subArray) {
+                return Utils.removeIf(array, function (el) {
                     return Utils.hasValue(subArray, el);
                 });
             };
             /** Checks if value is in array */
-            Utils.hasValue = function(array, value) {
+            Utils.hasValue = function (array, value) {
                 for (var tI = 0; tI < array.length; tI++) {
                     if (array[tI] === value) {
                         return true;
@@ -312,9 +307,9 @@ var BP3D;
 })(BP3D || (BP3D = {}));
 /// <reference path="../core/configuration.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Core;
-    (function(Core) {
+    (function (Core) {
         /** Dimensioning in Inch. */
         Core.dimInch = "inch";
         /** Dimensioning in Meter. */
@@ -324,13 +319,14 @@ var BP3D;
         /** Dimensioning in Milli Meter. */
         Core.dimMilliMeter = "mm";
         /** Dimensioning functions. */
-        var Dimensioning = (function() {
-            function Dimensioning() {}
+        var Dimensioning = (function () {
+            function Dimensioning() {
+            }
             /** Converts cm to dimensioning string.
              * @param cm Centi meter value to be converted.
              * @returns String representation.
              */
-            Dimensioning.cmToMeasure = function(cm) {
+            Dimensioning.cmToMeasure = function (cm) {
                 switch (Core.Configuration.getStringValue(Core.configDimUnit)) {
                     case Core.dimInch:
                         var realFeet = ((cm * 0.393700) / 12);
@@ -353,9 +349,9 @@ var BP3D;
 })(BP3D || (BP3D = {}));
 /// <reference path="dimensioning.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Core;
-    (function(Core) {
+    (function (Core) {
         // GENERAL:
         /** The dimensioning unit for 2D floorplan measurements. */
         Core.configDimUnit = "dimUnit";
@@ -365,14 +361,15 @@ var BP3D;
         /** The initial wall thickness in cm. */
         Core.configWallThickness = "wallThickness";
         /** Global configuration to customize the whole system.  */
-        var Configuration = (function() {
-            function Configuration() {}
+        var Configuration = (function () {
+            function Configuration() {
+            }
             /** Set a configuration parameter. */
-            Configuration.setValue = function(key, value) {
+            Configuration.setValue = function (key, value) {
                 this.data[key] = value;
             };
             /** Get a string configuration parameter. */
-            Configuration.getStringValue = function(key) {
+            Configuration.getStringValue = function (key) {
                 switch (key) {
                     case Core.configDimUnit:
                         return this.data[key];
@@ -381,7 +378,7 @@ var BP3D;
                 }
             };
             /** Get a numeric configuration parameter. */
-            Configuration.getNumericValue = function(key) {
+            Configuration.getNumericValue = function (key) {
                 switch (key) {
                     case Core.configWallHeight:
                     case Core.configWallThickness:
@@ -405,22 +402,20 @@ var BP3D;
 /// <reference path="../core/utils.ts" />
 /// <reference path="../model/model.ts" />
 /// <reference path="metadata.ts" />
-var __extends = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p)) d[p] = b[p];
-
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Items;
-    (function(Items) {
+    (function (Items) {
         /**
          * An Item is an abstract entity for all things placed in the scene,
          * e.g. at walls or on the floor.
          */
-        var Item = (function(_super) {
+        var Item = (function (_super) {
             __extends(Item, _super);
             /** Constructs an item.
              * @param model TODO
@@ -458,19 +453,19 @@ var BP3D;
                 /** dragging */
                 this.dragOffset = new THREE.Vector3();
                 /** */
-                this.getHeight = function() {
+                this.getHeight = function () {
                     return this.halfSize.y * 2.0;
                 };
                 /** */
-                this.getWidth = function() {
+                this.getWidth = function () {
                     return this.halfSize.x * 2.0;
                 };
                 /** */
-                this.getDepth = function() {
+                this.getDepth = function () {
                     return this.halfSize.z * 2.0;
                 };
                 /** */
-                this.initObject = function() {
+                this.initObject = function () {
                     this.placeInRoom();
                     // select and stuff
                     this.scene.needsUpdate = true;
@@ -487,7 +482,8 @@ var BP3D;
                 if (position) {
                     this.position.copy(position);
                     this.position_set = true;
-                } else {
+                }
+                else {
                     this.position_set = false;
                 }
                 // center in its boundingbox
@@ -501,75 +497,85 @@ var BP3D;
                 if (scale != null) {
                     this.setScale(scale.x, scale.y, scale.z);
                 }
-            };
+            }
+            ;
             /** */
-            Item.prototype.remove = function() {
+            Item.prototype.remove = function () {
                 this.scene.removeItem(this);
-            };;
+            };
+            ;
             /** */
-            Item.prototype.resize = function(height, width, depth) {
+            Item.prototype.resize = function (height, width, depth) {
                 var x = width / this.getWidth();
                 var y = height / this.getHeight();
                 var z = depth / this.getDepth();
                 this.setScale(x, y, z);
             };
             /** */
-            Item.prototype.setScale = function(x, y, z) {
+            Item.prototype.setScale = function (x, y, z) {
                 var scaleVec = new THREE.Vector3(x, y, z);
                 this.halfSize.multiply(scaleVec);
                 scaleVec.multiply(this.scale);
                 this.scale.set(scaleVec.x, scaleVec.y, scaleVec.z);
                 this.resized();
                 this.scene.needsUpdate = true;
-            };;
+            };
+            ;
             /** */
-            Item.prototype.setFixed = function(fixed) {
+            Item.prototype.setFixed = function (fixed) {
                 this.fixed = fixed;
             };
             /** */
-            Item.prototype.removed = function() {};
+            Item.prototype.removed = function () {
+            };
             /** on is a bool */
-            Item.prototype.updateHighlight = function() {
+            Item.prototype.updateHighlight = function () {
                 var on = this.hover || this.selected;
                 this.highlighted = on;
                 var hex = on ? this.emissiveColor : 0x000000;
-                this.material.materials.forEach(function(material) {
+                this.material.materials.forEach(function (material) {
                     // TODO_Ekki emissive doesn't exist anymore?
                     material.emissive.setHex(hex);
                 });
             };
             /** */
-            Item.prototype.mouseOver = function() {
+            Item.prototype.mouseOver = function () {
                 this.hover = true;
                 this.updateHighlight();
-            };;
+            };
+            ;
             /** */
-            Item.prototype.mouseOff = function() {
+            Item.prototype.mouseOff = function () {
                 this.hover = false;
                 this.updateHighlight();
-            };;
+            };
+            ;
             /** */
-            Item.prototype.setSelected = function() {
+            Item.prototype.setSelected = function () {
                 this.selected = true;
                 this.updateHighlight();
-            };;
+            };
+            ;
             /** */
-            Item.prototype.setUnselected = function() {
+            Item.prototype.setUnselected = function () {
                 this.selected = false;
                 this.updateHighlight();
-            };;
+            };
+            ;
             /** intersection has attributes point (vec3) and object (THREE.Mesh) */
-            Item.prototype.clickPressed = function(intersection) {
+            Item.prototype.clickPressed = function (intersection) {
                 this.dragOffset.copy(intersection.point).sub(this.position);
-            };;
+            };
+            ;
             /** */
-            Item.prototype.clickDragged = function(intersection) {
+            Item.prototype.clickDragged = function (intersection) {
                 if (intersection) {
                     this.moveToPosition(intersection.point.sub(this.dragOffset), intersection);
                 }
-            };;
+            };
+            ;
             /** */
-            Item.prototype.rotate = function(intersection) {
+            Item.prototype.rotate = function (intersection) {
                 if (intersection) {
                     var angle = BP3D.Core.Utils.angle(0, 1, intersection.point.x - this.position.x, intersection.point.z - this.position.z);
                     var snapTolerance = Math.PI / 16.0;
@@ -584,20 +590,21 @@ var BP3D;
                 }
             };
             /** */
-            Item.prototype.moveToPosition = function(vec3, intersection) {
+            Item.prototype.moveToPosition = function (vec3, intersection) {
                 this.position.copy(vec3);
             };
             /** */
-            Item.prototype.clickReleased = function() {
+            Item.prototype.clickReleased = function () {
                 if (this.error) {
                     this.hideError();
                 }
-            };;
+            };
+            ;
             /**
              * Returns an array of planes to use other than the ground plane
              * for passing intersection to clickPressed and clickDragged
              */
-            Item.prototype.customIntersectionPlanes = function() {
+            Item.prototype.customIntersectionPlanes = function () {
                 return [];
             };
             /**
@@ -607,7 +614,7 @@ var BP3D;
              *
              * TODO: handle rotated objects better!
              */
-            Item.prototype.getCorners = function(xDim, yDim, position) {
+            Item.prototype.getCorners = function (xDim, yDim, position) {
                 position = position || this.position;
                 var halfSize = this.halfSize.clone();
                 var c1 = new THREE.Vector3(-halfSize.x, 0, -halfSize.z);
@@ -637,7 +644,7 @@ var BP3D;
                 return corners;
             };
             /** */
-            Item.prototype.showError = function(vec3) {
+            Item.prototype.showError = function (vec3) {
                 vec3 = vec3 || this.position;
                 if (!this.error) {
                     this.error = true;
@@ -647,20 +654,20 @@ var BP3D;
                 this.errorGlow.position.copy(vec3);
             };
             /** */
-            Item.prototype.hideError = function() {
+            Item.prototype.hideError = function () {
                 if (this.error) {
                     this.error = false;
                     this.scene.remove(this.errorGlow);
                 }
             };
             /** */
-            Item.prototype.objectHalfSize = function() {
+            Item.prototype.objectHalfSize = function () {
                 var objectBox = new THREE.Box3();
                 objectBox.setFromObject(this);
                 return objectBox.max.clone().sub(objectBox.min).divideScalar(2);
             };
             /** */
-            Item.prototype.createGlow = function(color, opacity, ignoreDepth) {
+            Item.prototype.createGlow = function (color, opacity, ignoreDepth) {
                 ignoreDepth = ignoreDepth || false;
                 opacity = opacity || 0.2;
                 var glowMaterial = new THREE.MeshBasicMaterial({
@@ -675,7 +682,8 @@ var BP3D;
                 glow.rotation.copy(this.rotation);
                 glow.scale.copy(this.scale);
                 return glow;
-            };;
+            };
+            ;
             return Item;
         })(THREE.Mesh);
         Items.Item = Item;
@@ -686,15 +694,15 @@ var BP3D;
 /// <reference path="floorplan.ts" />
 /// <reference path="wall.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Model;
-    (function(Model) {
+    (function (Model) {
         /** */
         var cornerTolerance = 20;
         /**
          * Corners are used to define Walls.
          */
-        var Corner = (function() {
+        var Corner = (function () {
             /** Constructs a corner.
              * @param floorplan The associated floorplan.
              * @param x X coordinate.
@@ -720,47 +728,47 @@ var BP3D;
             }
             /** Add function to moved callbacks.
              * @param func The function to be added.
-             */
-            Corner.prototype.fireOnMove = function(func) {
+            */
+            Corner.prototype.fireOnMove = function (func) {
                 this.moved_callbacks.add(func);
             };
             /** Add function to deleted callbacks.
              * @param func The function to be added.
              */
-            Corner.prototype.fireOnDelete = function(func) {
+            Corner.prototype.fireOnDelete = function (func) {
                 this.deleted_callbacks.add(func);
             };
             /** Add function to action callbacks.
              * @param func The function to be added.
              */
-            Corner.prototype.fireOnAction = function(func) {
+            Corner.prototype.fireOnAction = function (func) {
                 this.action_callbacks.add(func);
             };
             /**
              * @returns
              * @deprecated
              */
-            Corner.prototype.getX = function() {
+            Corner.prototype.getX = function () {
                 return this.x;
             };
             /**
              * @returns
              * @deprecated
              */
-            Corner.prototype.getY = function() {
+            Corner.prototype.getY = function () {
                 return this.y;
             };
             /**
              *
              */
-            Corner.prototype.snapToAxis = function(tolerance) {
+            Corner.prototype.snapToAxis = function (tolerance) {
                 // try to snap this corner to an axis
                 var snapped = {
                     x: false,
                     y: false
                 };
                 var scope = this;
-                this.adjacentCorners().forEach(function(corner) {
+                this.adjacentCorners().forEach(function (corner) {
                     if (Math.abs(corner.x - scope.x) < tolerance) {
                         scope.x = corner.x;
                         snapped.x = true;
@@ -776,18 +784,18 @@ var BP3D;
              * @param dx The delta x.
              * @param dy The delta y.
              */
-            Corner.prototype.relativeMove = function(dx, dy) {
+            Corner.prototype.relativeMove = function (dx, dy) {
                 this.move(this.x + dx, this.y + dy);
             };
-            Corner.prototype.fireAction = function(action) {
+            Corner.prototype.fireAction = function (action) {
                 this.action_callbacks.fire(action);
             };
             /** Remove callback. Fires the delete callbacks. */
-            Corner.prototype.remove = function() {
+            Corner.prototype.remove = function () {
                 this.deleted_callbacks.fire(this);
             };
             /** Removes all walls. */
-            Corner.prototype.removeAll = function() {
+            Corner.prototype.removeAll = function () {
                 for (var i = 0; i < this.wallStarts.length; i++) {
                     this.wallStarts[i].remove();
                 }
@@ -800,22 +808,22 @@ var BP3D;
              * @param newX The new x position.
              * @param newY The new y position.
              */
-            Corner.prototype.move = function(newX, newY) {
+            Corner.prototype.move = function (newX, newY) {
                 this.x = newX;
                 this.y = newY;
                 this.mergeWithIntersected();
                 this.moved_callbacks.fire(this.x, this.y);
-                this.wallStarts.forEach(function(wall) {
+                this.wallStarts.forEach(function (wall) {
                     wall.fireMoved();
                 });
-                this.wallEnds.forEach(function(wall) {
+                this.wallEnds.forEach(function (wall) {
                     wall.fireMoved();
                 });
             };
             /** Gets the adjacent corners.
              * @returns Array of corners.
              */
-            Corner.prototype.adjacentCorners = function() {
+            Corner.prototype.adjacentCorners = function () {
                 var retArray = [];
                 for (var i = 0; i < this.wallStarts.length; i++) {
                     retArray.push(this.wallStarts[i].getEnd());
@@ -829,7 +837,7 @@ var BP3D;
              * @param wall A wall.
              * @returns True in case of connection.
              */
-            Corner.prototype.isWallConnected = function(wall) {
+            Corner.prototype.isWallConnected = function (wall) {
                 for (var i = 0; i < this.wallStarts.length; i++) {
                     if (this.wallStarts[i] == wall) {
                         return true;
@@ -845,7 +853,7 @@ var BP3D;
             /**
              *
              */
-            Corner.prototype.distanceFrom = function(x, y) {
+            Corner.prototype.distanceFrom = function (x, y) {
                 var distance = BP3D.Core.Utils.distance(x, y, this.x, this.y);
                 //console.log('x,y ' + x + ',' + y + ' to ' + this.getX() + ',' + this.getY() + ' is ' + distance);
                 return distance;
@@ -854,20 +862,20 @@ var BP3D;
              * @param wall A wall.
              * @returns The distance.
              */
-            Corner.prototype.distanceFromWall = function(wall) {
+            Corner.prototype.distanceFromWall = function (wall) {
                 return wall.distanceFrom(this.x, this.y);
             };
             /** Gets the distance from a corner.
              * @param corner A corner.
              * @returns The distance.
              */
-            Corner.prototype.distanceFromCorner = function(corner) {
+            Corner.prototype.distanceFromCorner = function (corner) {
                 return this.distanceFrom(corner.x, corner.y);
             };
             /** Detaches a wall.
              * @param wall A wall.
              */
-            Corner.prototype.detachWall = function(wall) {
+            Corner.prototype.detachWall = function (wall) {
                 BP3D.Core.Utils.removeValue(this.wallStarts, wall);
                 BP3D.Core.Utils.removeValue(this.wallEnds, wall);
                 if (this.wallStarts.length == 0 && this.wallEnds.length == 0) {
@@ -877,20 +885,20 @@ var BP3D;
             /** Attaches a start wall.
              * @param wall A wall.
              */
-            Corner.prototype.attachStart = function(wall) {
+            Corner.prototype.attachStart = function (wall) {
                 this.wallStarts.push(wall);
             };
             /** Attaches an end wall.
              * @param wall A wall.
              */
-            Corner.prototype.attachEnd = function(wall) {
+            Corner.prototype.attachEnd = function (wall) {
                 this.wallEnds.push(wall);
             };
             /** Get wall to corner.
              * @param corner A corner.
              * @return The associated wall or null.
              */
-            Corner.prototype.wallTo = function(corner) {
+            Corner.prototype.wallTo = function (corner) {
                 for (var i = 0; i < this.wallStarts.length; i++) {
                     if (this.wallStarts[i].getEnd() === corner) {
                         return this.wallStarts[i];
@@ -902,7 +910,7 @@ var BP3D;
              * @param corner A corner.
              * @return The associated wall or null.
              */
-            Corner.prototype.wallFrom = function(corner) {
+            Corner.prototype.wallFrom = function (corner) {
                 for (var i = 0; i < this.wallEnds.length; i++) {
                     if (this.wallEnds[i].getStart() === corner) {
                         return this.wallEnds[i];
@@ -914,13 +922,13 @@ var BP3D;
              * @param corner A corner.
              * @return The associated wall or null.
              */
-            Corner.prototype.wallToOrFrom = function(corner) {
+            Corner.prototype.wallToOrFrom = function (corner) {
                 return this.wallTo(corner) || this.wallFrom(corner);
             };
             /**
              *
              */
-            Corner.prototype.combineWithCorner = function(corner) {
+            Corner.prototype.combineWithCorner = function (corner) {
                 // update position to other corner's
                 this.x = corner.x;
                 this.y = corner.y;
@@ -936,7 +944,7 @@ var BP3D;
                 this.removeDuplicateWalls();
                 this.floorplan.update();
             };
-            Corner.prototype.mergeWithIntersected = function() {
+            Corner.prototype.mergeWithIntersected = function () {
                 //console.log('mergeWithIntersected for object: ' + this.type);
                 // check corners
                 for (var i = 0; i < this.floorplan.getCorners().length; i++) {
@@ -964,7 +972,7 @@ var BP3D;
                 return false;
             };
             /** Ensure we do not have duplicate walls (i.e. same start and end points) */
-            Corner.prototype.removeDuplicateWalls = function() {
+            Corner.prototype.removeDuplicateWalls = function () {
                 // delete the wall between these corners, if it exists
                 var wallEndpoints = {};
                 var wallStartpoints = {};
@@ -972,10 +980,12 @@ var BP3D;
                     if (this.wallStarts[i].getEnd() === this) {
                         // remove zero length wall 
                         this.wallStarts[i].remove();
-                    } else if (this.wallStarts[i].getEnd().id in wallEndpoints) {
+                    }
+                    else if (this.wallStarts[i].getEnd().id in wallEndpoints) {
                         // remove duplicated wall
                         this.wallStarts[i].remove();
-                    } else {
+                    }
+                    else {
                         wallEndpoints[this.wallStarts[i].getEnd().id] = true;
                     }
                 }
@@ -983,10 +993,12 @@ var BP3D;
                     if (this.wallEnds[i].getStart() === this) {
                         // removed zero length wall 
                         this.wallEnds[i].remove();
-                    } else if (this.wallEnds[i].getStart().id in wallStartpoints) {
+                    }
+                    else if (this.wallEnds[i].getStart().id in wallStartpoints) {
                         // removed duplicated wall
                         this.wallEnds[i].remove();
-                    } else {
+                    }
+                    else {
                         wallStartpoints[this.wallEnds[i].getStart().id] = true;
                     }
                 }
@@ -1000,9 +1012,9 @@ var BP3D;
 /// <reference path="../../lib/jQuery.d.ts" />
 /// <reference path="../core/utils.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Model;
-    (function(Model) {
+    (function (Model) {
         /**
          * Half Edges are created by Room.
          *
@@ -1010,7 +1022,7 @@ var BP3D;
          *
          * A wall can have two half edges if it is visible from both sides.
          */
-        var HalfEdge = (function() {
+        var HalfEdge = (function () {
             /**
              * Constructs a half edge.
              * @param room The associated room.
@@ -1036,7 +1048,7 @@ var BP3D;
                 /**
                  * this feels hacky, but need wall items
                  */
-                this.generatePlane = function() {
+                this.generatePlane = function () {
                     function transformCorner(corner) {
                         return new THREE.Vector3(corner.x, 0, corner.y);
                     }
@@ -1063,24 +1075,26 @@ var BP3D;
                 this.height = wall.height;
                 if (this.front) {
                     this.wall.frontEdge = this;
-                } else {
+                }
+                else {
                     this.wall.backEdge = this;
                 }
             }
             /**
              *
              */
-            HalfEdge.prototype.getTexture = function() {
+            HalfEdge.prototype.getTexture = function () {
                 if (this.front) {
                     return this.wall.frontTexture;
-                } else {
+                }
+                else {
                     return this.wall.backTexture;
                 }
             };
             /**
              *
              */
-            HalfEdge.prototype.setTexture = function(textureUrl, textureStretch, textureScale) {
+            HalfEdge.prototype.setTexture = function (textureUrl, textureStretch, textureScale) {
                 var texture = {
                     url: textureUrl,
                     stretch: textureStretch,
@@ -1088,17 +1102,18 @@ var BP3D;
                 };
                 if (this.front) {
                     this.wall.frontTexture = texture;
-                } else {
+                }
+                else {
                     this.wall.backTexture = texture;
                 }
                 this.redrawCallbacks.fire();
             };
-            HalfEdge.prototype.interiorDistance = function() {
+            HalfEdge.prototype.interiorDistance = function () {
                 var start = this.interiorStart();
                 var end = this.interiorEnd();
                 return BP3D.Core.Utils.distance(start.x, start.y, end.x, end.y);
             };
-            HalfEdge.prototype.computeTransforms = function(transform, invTransform, start, end) {
+            HalfEdge.prototype.computeTransforms = function (transform, invTransform, start, end) {
                 var v1 = start;
                 var v2 = end;
                 var angle = BP3D.Core.Utils.angle(1, 0, v2.x - v1.x, v2.y - v1.y);
@@ -1114,60 +1129,63 @@ var BP3D;
              * @param y Y coordinate of the point.
              * @returns The distance.
              */
-            HalfEdge.prototype.distanceTo = function(x, y) {
+            HalfEdge.prototype.distanceTo = function (x, y) {
                 // x, y, x1, y1, x2, y2
                 return BP3D.Core.Utils.pointDistanceFromLine(x, y, this.interiorStart().x, this.interiorStart().y, this.interiorEnd().x, this.interiorEnd().y);
             };
-            HalfEdge.prototype.getStart = function() {
+            HalfEdge.prototype.getStart = function () {
                 if (this.front) {
                     return this.wall.getStart();
-                } else {
+                }
+                else {
                     return this.wall.getEnd();
                 }
             };
-            HalfEdge.prototype.getEnd = function() {
+            HalfEdge.prototype.getEnd = function () {
                 if (this.front) {
                     return this.wall.getEnd();
-                } else {
+                }
+                else {
                     return this.wall.getStart();
                 }
             };
-            HalfEdge.prototype.getOppositeEdge = function() {
+            HalfEdge.prototype.getOppositeEdge = function () {
                 if (this.front) {
                     return this.wall.backEdge;
-                } else {
+                }
+                else {
                     return this.wall.frontEdge;
                 }
             };
             // these return an object with attributes x, y
-            HalfEdge.prototype.interiorEnd = function() {
+            HalfEdge.prototype.interiorEnd = function () {
                 var vec = this.halfAngleVector(this, this.next);
                 return {
                     x: this.getEnd().x + vec.x,
                     y: this.getEnd().y + vec.y
                 };
             };
-            HalfEdge.prototype.interiorStart = function() {
+            HalfEdge.prototype.interiorStart = function () {
                 var vec = this.halfAngleVector(this.prev, this);
                 return {
                     x: this.getStart().x + vec.x,
                     y: this.getStart().y + vec.y
                 };
             };
-            HalfEdge.prototype.interiorCenter = function() {
+            HalfEdge.prototype.interiorCenter = function () {
                 return {
                     x: (this.interiorStart().x + this.interiorEnd().x) / 2.0,
                     y: (this.interiorStart().y + this.interiorEnd().y) / 2.0,
                 };
             };
-            HalfEdge.prototype.exteriorEnd = function() {
+            HalfEdge.prototype.exteriorEnd = function () {
                 var vec = this.halfAngleVector(this, this.next);
                 return {
                     x: this.getEnd().x - vec.x,
                     y: this.getEnd().y - vec.y
                 };
             };
-            HalfEdge.prototype.exteriorStart = function() {
+            HalfEdge.prototype.exteriorStart = function () {
                 var vec = this.halfAngleVector(this.prev, this);
                 return {
                     x: this.getStart().x - vec.x,
@@ -1177,22 +1195,22 @@ var BP3D;
             /** Get the corners of the half edge.
              * @returns An array of x,y pairs.
              */
-            HalfEdge.prototype.corners = function() {
+            HalfEdge.prototype.corners = function () {
                 return [this.interiorStart(), this.interiorEnd(),
-                    this.exteriorEnd(), this.exteriorStart()
-                ];
+                    this.exteriorEnd(), this.exteriorStart()];
             };
             /**
              * Gets CCW angle from v1 to v2
              */
-            HalfEdge.prototype.halfAngleVector = function(v1, v2) {
+            HalfEdge.prototype.halfAngleVector = function (v1, v2) {
                 // make the best of things if we dont have prev or next
                 if (!v1) {
                     var v1startX = v2.getStart().x - (v2.getEnd().x - v2.getStart().x);
                     var v1startY = v2.getStart().y - (v2.getEnd().y - v2.getStart().y);
                     var v1endX = v2.getStart().x;
                     var v1endY = v2.getStart().y;
-                } else {
+                }
+                else {
                     var v1startX = v1.getStart().x;
                     var v1startY = v1.getStart().y;
                     var v1endX = v1.getEnd().x;
@@ -1203,7 +1221,8 @@ var BP3D;
                     var v2startY = v1.getEnd().y;
                     var v2endX = v1.getEnd().x + (v1.getEnd().x - v1.getStart().x);
                     var v2endY = v1.getEnd().y + (v1.getEnd().y - v1.getStart().y);
-                } else {
+                }
+                else {
                     var v2startX = v2.getStart().x;
                     var v2startY = v2.getStart().y;
                     var v2endX = v2.getEnd().x;
@@ -1242,9 +1261,9 @@ var BP3D;
 /// <reference path="corner.ts" />
 /// <reference path="half_edge.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Model;
-    (function(Model) {
+    (function (Model) {
         /** The default wall texture. */
         var defaultWallTexture = {
             url: "rooms/textures/wallmap.png",
@@ -1256,7 +1275,7 @@ var BP3D;
          *
          * Walls consists of two half edges.
          */
-        var Wall = (function() {
+        var Wall = (function () {
             /**
              * Constructs a new wall.
              * @param start Start corner.
@@ -1293,42 +1312,42 @@ var BP3D;
                 this.start.attachStart(this);
                 this.end.attachEnd(this);
             }
-            Wall.prototype.getUuid = function() {
+            Wall.prototype.getUuid = function () {
                 return [this.start.id, this.end.id].join();
             };
-            Wall.prototype.resetFrontBack = function() {
+            Wall.prototype.resetFrontBack = function () {
                 this.frontEdge = null;
                 this.backEdge = null;
                 this.orphan = false;
             };
-            Wall.prototype.snapToAxis = function(tolerance) {
+            Wall.prototype.snapToAxis = function (tolerance) {
                 // order here is important, but unfortunately arbitrary
                 this.start.snapToAxis(tolerance);
                 this.end.snapToAxis(tolerance);
             };
-            Wall.prototype.fireOnMove = function(func) {
+            Wall.prototype.fireOnMove = function (func) {
                 this.moved_callbacks.add(func);
             };
-            Wall.prototype.fireOnDelete = function(func) {
+            Wall.prototype.fireOnDelete = function (func) {
                 this.deleted_callbacks.add(func);
             };
-            Wall.prototype.dontFireOnDelete = function(func) {
+            Wall.prototype.dontFireOnDelete = function (func) {
                 this.deleted_callbacks.remove(func);
             };
-            Wall.prototype.fireOnAction = function(func) {
+            Wall.prototype.fireOnAction = function (func) {
                 this.action_callbacks.add(func);
             };
-            Wall.prototype.fireAction = function(action) {
+            Wall.prototype.fireAction = function (action) {
                 this.action_callbacks.fire(action);
             };
-            Wall.prototype.relativeMove = function(dx, dy) {
+            Wall.prototype.relativeMove = function (dx, dy) {
                 this.start.relativeMove(dx, dy);
                 this.end.relativeMove(dx, dy);
             };
-            Wall.prototype.fireMoved = function() {
+            Wall.prototype.fireMoved = function () {
                 this.moved_callbacks.fire();
             };
-            Wall.prototype.fireRedraw = function() {
+            Wall.prototype.fireRedraw = function () {
                 if (this.frontEdge) {
                     this.frontEdge.redrawCallbacks.fire();
                 }
@@ -1336,54 +1355,56 @@ var BP3D;
                     this.backEdge.redrawCallbacks.fire();
                 }
             };
-            Wall.prototype.getStart = function() {
+            Wall.prototype.getStart = function () {
                 return this.start;
             };
-            Wall.prototype.getEnd = function() {
+            Wall.prototype.getEnd = function () {
                 return this.end;
             };
-            Wall.prototype.getStartX = function() {
+            Wall.prototype.getStartX = function () {
                 return this.start.getX();
             };
-            Wall.prototype.getEndX = function() {
+            Wall.prototype.getEndX = function () {
                 return this.end.getX();
             };
-            Wall.prototype.getStartY = function() {
+            Wall.prototype.getStartY = function () {
                 return this.start.getY();
             };
-            Wall.prototype.getEndY = function() {
+            Wall.prototype.getEndY = function () {
                 return this.end.getY();
             };
-            Wall.prototype.remove = function() {
+            Wall.prototype.remove = function () {
                 this.start.detachWall(this);
                 this.end.detachWall(this);
                 this.deleted_callbacks.fire(this);
             };
-            Wall.prototype.setStart = function(corner) {
+            Wall.prototype.setStart = function (corner) {
                 this.start.detachWall(this);
                 corner.attachStart(this);
                 this.start = corner;
                 this.fireMoved();
             };
-            Wall.prototype.setEnd = function(corner) {
+            Wall.prototype.setEnd = function (corner) {
                 this.end.detachWall(this);
                 corner.attachEnd(this);
                 this.end = corner;
                 this.fireMoved();
             };
-            Wall.prototype.distanceFrom = function(x, y) {
+            Wall.prototype.distanceFrom = function (x, y) {
                 return BP3D.Core.Utils.pointDistanceFromLine(x, y, this.getStartX(), this.getStartY(), this.getEndX(), this.getEndY());
             };
             /** Return the corner opposite of the one provided.
              * @param corner The given corner.
              * @returns The opposite corner.
              */
-            Wall.prototype.oppositeCorner = function(corner) {
+            Wall.prototype.oppositeCorner = function (corner) {
                 if (this.start === corner) {
                     return this.end;
-                } else if (this.end === corner) {
+                }
+                else if (this.end === corner) {
                     return this.start;
-                } else {
+                }
+                else {
                     console.log('Wall does not connect to corner');
                 }
             };
@@ -1405,9 +1426,9 @@ var segseg = require('segseg')
 var Polygon = require('polygon')
 */
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Model;
-    (function(Model) {
+    (function (Model) {
         /** Default texture to be used if nothing is provided. */
         var defaultRoomTexture = {
             url: "rooms/textures/hardwood.png",
@@ -1416,7 +1437,7 @@ var BP3D;
         /**
          * A Room is the combination of a Floorplan with a floor plane.
          */
-        var Room = (function() {
+        var Room = (function () {
             /**
              *  ordered CCW
              */
@@ -1437,17 +1458,17 @@ var BP3D;
                 this.updateInteriorCorners();
                 this.generatePlane();
             }
-            Room.prototype.getUuid = function() {
-                var cornerUuids = BP3D.Core.Utils.map(this.corners, function(c) {
+            Room.prototype.getUuid = function () {
+                var cornerUuids = BP3D.Core.Utils.map(this.corners, function (c) {
                     return c.id;
                 });
                 cornerUuids.sort();
                 return cornerUuids.join();
             };
-            Room.prototype.fireOnFloorChange = function(callback) {
+            Room.prototype.fireOnFloorChange = function (callback) {
                 this.floorChangeCallbacks.add(callback);
             };
-            Room.prototype.getTexture = function() {
+            Room.prototype.getTexture = function () {
                 var uuid = this.getUuid();
                 var tex = this.floorplan.getFloorTexture(uuid);
                 return tex || defaultRoomTexture;
@@ -1455,14 +1476,14 @@ var BP3D;
             /**
              * textureStretch always true, just an argument for consistency with walls
              */
-            Room.prototype.setTexture = function(textureUrl, textureStretch, textureScale) {
+            Room.prototype.setTexture = function (textureUrl, textureStretch, textureScale) {
                 var uuid = this.getUuid();
                 this.floorplan.setFloorTexture(uuid, textureUrl, textureScale);
                 this.floorChangeCallbacks.fire();
             };
-            Room.prototype.generatePlane = function() {
+            Room.prototype.generatePlane = function () {
                 var points = [];
-                this.interiorCorners.forEach(function(corner) {
+                this.interiorCorners.forEach(function (corner) {
                     points.push(new THREE.Vector2(corner.x, corner.y));
                 });
                 var shape = new THREE.Shape(points);
@@ -1474,21 +1495,23 @@ var BP3D;
                 this.floorPlane.rotation.set(Math.PI / 2, 0, 0);
                 this.floorPlane.room = this; // js monkey patch
             };
-            Room.prototype.cycleIndex = function(index) {
+            Room.prototype.cycleIndex = function (index) {
                 if (index < 0) {
                     return index += this.corners.length;
-                } else {
+                }
+                else {
                     return index % this.corners.length;
                 }
             };
-            Room.prototype.updateInteriorCorners = function() {
+            Room.prototype.updateInteriorCorners = function () {
                 var edge = this.edgePointer;
                 while (true) {
                     this.interiorCorners.push(edge.interiorStart());
                     edge.generatePlane();
                     if (edge.next === this.edgePointer) {
                         break;
-                    } else {
+                    }
+                    else {
                         edge = edge.next;
                     }
                 }
@@ -1497,7 +1520,7 @@ var BP3D;
              * Populates each wall's half edge relating to this room
              * this creates a fancy doubly connected edge list (DCEL)
              */
-            Room.prototype.updateWalls = function() {
+            Room.prototype.updateWalls = function () {
                 var prevEdge = null;
                 var firstEdge = null;
                 for (var i = 0; i < this.corners.length; i++) {
@@ -1508,15 +1531,18 @@ var BP3D;
                     var wallFrom = firstCorner.wallFrom(secondCorner);
                     if (wallTo) {
                         var edge = new Model.HalfEdge(this, wallTo, true);
-                    } else if (wallFrom) {
+                    }
+                    else if (wallFrom) {
                         var edge = new Model.HalfEdge(this, wallFrom, false);
-                    } else {
+                    }
+                    else {
                         // something horrible has happened
                         console.log("corners arent connected by a wall, uh oh");
                     }
                     if (i == 0) {
                         firstEdge = edge;
-                    } else {
+                    }
+                    else {
                         edge.prev = prevEdge;
                         prevEdge.next = edge;
                         if (i + 1 == this.corners.length) {
@@ -1542,15 +1568,15 @@ var BP3D;
 /// <reference path="room.ts" />
 /// <reference path="half_edge.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Model;
-    (function(Model) {
+    (function (Model) {
         /** */
         var defaultFloorPlanTolerance = 10.0;
         /**
          * A Floorplan represents a number of Walls, Corners and Rooms.
          */
-        var Floorplan = (function() {
+        var Floorplan = (function () {
             /** Constructs a floorplan. */
             function Floorplan() {
                 /** */
@@ -1570,17 +1596,17 @@ var BP3D;
                 /** */
                 this.roomLoadedCallbacks = $.Callbacks();
                 /**
-                 * Floor textures are owned by the floorplan, because room objects are
-                 * destroyed and created each time we change the floorplan.
-                 * floorTextures is a map of room UUIDs (string) to a object with
-                 * url and scale attributes.
-                 */
+                * Floor textures are owned by the floorplan, because room objects are
+                * destroyed and created each time we change the floorplan.
+                * floorTextures is a map of room UUIDs (string) to a object with
+                * url and scale attributes.
+                */
                 this.floorTextures = {};
             }
             // hack
-            Floorplan.prototype.wallEdges = function() {
+            Floorplan.prototype.wallEdges = function () {
                 var edges = [];
-                this.walls.forEach(function(wall) {
+                this.walls.forEach(function (wall) {
                     if (wall.frontEdge) {
                         edges.push(wall.frontEdge);
                     }
@@ -1591,9 +1617,9 @@ var BP3D;
                 return edges;
             };
             // hack
-            Floorplan.prototype.wallEdgePlanes = function() {
+            Floorplan.prototype.wallEdgePlanes = function () {
                 var planes = [];
-                this.walls.forEach(function(wall) {
+                this.walls.forEach(function (wall) {
                     if (wall.frontEdge) {
                         planes.push(wall.frontEdge.plane);
                     }
@@ -1603,21 +1629,21 @@ var BP3D;
                 });
                 return planes;
             };
-            Floorplan.prototype.floorPlanes = function() {
-                return BP3D.Core.Utils.map(this.rooms, function(room) {
+            Floorplan.prototype.floorPlanes = function () {
+                return BP3D.Core.Utils.map(this.rooms, function (room) {
                     return room.floorPlane;
                 });
             };
-            Floorplan.prototype.fireOnNewWall = function(callback) {
+            Floorplan.prototype.fireOnNewWall = function (callback) {
                 this.new_wall_callbacks.add(callback);
             };
-            Floorplan.prototype.fireOnNewCorner = function(callback) {
+            Floorplan.prototype.fireOnNewCorner = function (callback) {
                 this.new_corner_callbacks.add(callback);
             };
-            Floorplan.prototype.fireOnRedraw = function(callback) {
+            Floorplan.prototype.fireOnRedraw = function (callback) {
                 this.redraw_callbacks.add(callback);
             };
-            Floorplan.prototype.fireOnUpdatedRooms = function(callback) {
+            Floorplan.prototype.fireOnUpdatedRooms = function (callback) {
                 this.updated_rooms.add(callback);
             };
             /**
@@ -1626,11 +1652,11 @@ var BP3D;
              * @param end he end corner.
              * @returns The new wall.
              */
-            Floorplan.prototype.newWall = function(start, end) {
+            Floorplan.prototype.newWall = function (start, end) {
                 var wall = new Model.Wall(start, end);
                 this.walls.push(wall);
                 var scope = this;
-                wall.fireOnDelete(function() {
+                wall.fireOnDelete(function () {
                     scope.removeWall(wall);
                 });
                 this.new_wall_callbacks.fire(wall);
@@ -1640,7 +1666,7 @@ var BP3D;
             /** Removes a wall.
              * @param wall The wall to be removed.
              */
-            Floorplan.prototype.removeWall = function(wall) {
+            Floorplan.prototype.removeWall = function (wall) {
                 BP3D.Core.Utils.removeValue(this.walls, wall);
                 this.update();
             };
@@ -1651,11 +1677,11 @@ var BP3D;
              * @param id An optional id. If unspecified, the id will be created internally.
              * @returns The new corner.
              */
-            Floorplan.prototype.newCorner = function(x, y, id) {
+            Floorplan.prototype.newCorner = function (x, y, id) {
                 var _this = this;
                 var corner = new Model.Corner(this, x, y, id);
                 this.corners.push(corner);
-                corner.fireOnDelete(function() {
+                corner.fireOnDelete(function () {
                     _this.removeCorner;
                 });
                 this.new_corner_callbacks.fire(corner);
@@ -1664,22 +1690,22 @@ var BP3D;
             /** Removes a corner.
              * @param corner The corner to be removed.
              */
-            Floorplan.prototype.removeCorner = function(corner) {
+            Floorplan.prototype.removeCorner = function (corner) {
                 BP3D.Core.Utils.removeValue(this.corners, corner);
             };
             /** Gets the walls. */
-            Floorplan.prototype.getWalls = function() {
+            Floorplan.prototype.getWalls = function () {
                 return this.walls;
             };
             /** Gets the corners. */
-            Floorplan.prototype.getCorners = function() {
+            Floorplan.prototype.getCorners = function () {
                 return this.corners;
             };
             /** Gets the rooms. */
-            Floorplan.prototype.getRooms = function() {
+            Floorplan.prototype.getRooms = function () {
                 return this.rooms;
             };
-            Floorplan.prototype.overlappedCorner = function(x, y, tolerance) {
+            Floorplan.prototype.overlappedCorner = function (x, y, tolerance) {
                 tolerance = tolerance || defaultFloorPlanTolerance;
                 for (var i = 0; i < this.corners.length; i++) {
                     if (this.corners[i].distanceFrom(x, y) < tolerance) {
@@ -1688,7 +1714,7 @@ var BP3D;
                 }
                 return null;
             };
-            Floorplan.prototype.overlappedWall = function(x, y, tolerance) {
+            Floorplan.prototype.overlappedWall = function (x, y, tolerance) {
                 tolerance = tolerance || defaultFloorPlanTolerance;
                 for (var i = 0; i < this.walls.length; i++) {
                     if (this.walls[i].distanceFrom(x, y) < tolerance) {
@@ -1698,7 +1724,7 @@ var BP3D;
                 return null;
             };
             // import and export -- cleanup
-            Floorplan.prototype.saveFloorplan = function() {
+            Floorplan.prototype.saveFloorplan = function () {
                 var floorplan = {
                     corners: {},
                     walls: [],
@@ -1706,13 +1732,13 @@ var BP3D;
                     floorTextures: {},
                     newFloorTextures: {}
                 };
-                this.corners.forEach(function(corner) {
+                this.corners.forEach(function (corner) {
                     floorplan.corners[corner.id] = {
                         'x': corner.x,
                         'y': corner.y
                     };
                 });
-                this.walls.forEach(function(wall) {
+                this.walls.forEach(function (wall) {
                     floorplan.walls.push({
                         'corner1': wall.getStart().id,
                         'corner2': wall.getEnd().id,
@@ -1723,7 +1749,7 @@ var BP3D;
                 floorplan.newFloorTextures = this.floorTextures;
                 return floorplan;
             };
-            Floorplan.prototype.loadFloorplan = function(floorplan) {
+            Floorplan.prototype.loadFloorplan = function (floorplan) {
                 this.reset();
                 var corners = {};
                 if (floorplan == null || !('corners' in floorplan) || !('walls' in floorplan)) {
@@ -1734,7 +1760,7 @@ var BP3D;
                     corners[id] = this.newCorner(corner.x, corner.y, id);
                 }
                 var scope = this;
-                floorplan.walls.forEach(function(wall) {
+                floorplan.walls.forEach(function (wall) {
                     var newWall = scope.newWall(corners[wall.corner1], corners[wall.corner2]);
                     if (wall.frontTexture) {
                         newWall.frontTexture = wall.frontTexture;
@@ -1749,22 +1775,23 @@ var BP3D;
                 this.update();
                 this.roomLoadedCallbacks.fire();
             };
-            Floorplan.prototype.getFloorTexture = function(uuid) {
+            Floorplan.prototype.getFloorTexture = function (uuid) {
                 if (uuid in this.floorTextures) {
                     return this.floorTextures[uuid];
-                } else {
+                }
+                else {
                     return null;
                 }
             };
-            Floorplan.prototype.setFloorTexture = function(uuid, url, scale) {
+            Floorplan.prototype.setFloorTexture = function (uuid, url, scale) {
                 this.floorTextures[uuid] = {
                     url: url,
                     scale: scale
                 };
             };
             /** clear out obsolete floor textures */
-            Floorplan.prototype.updateFloorTextures = function() {
-                var uuids = BP3D.Core.Utils.map(this.rooms, function(room) {
+            Floorplan.prototype.updateFloorTextures = function () {
+                var uuids = BP3D.Core.Utils.map(this.rooms, function (room) {
                     return room.getUuid();
                 });
                 for (var uuid in this.floorTextures) {
@@ -1774,13 +1801,13 @@ var BP3D;
                 }
             };
             /** */
-            Floorplan.prototype.reset = function() {
+            Floorplan.prototype.reset = function () {
                 var tmpCorners = this.corners.slice(0);
                 var tmpWalls = this.walls.slice(0);
-                tmpCorners.forEach(function(corner) {
+                tmpCorners.forEach(function (corner) {
                     corner.remove();
                 });
-                tmpWalls.forEach(function(wall) {
+                tmpWalls.forEach(function (wall) {
                     wall.remove();
                 });
                 this.corners = [];
@@ -1789,14 +1816,14 @@ var BP3D;
             /**
              * Update rooms
              */
-            Floorplan.prototype.update = function() {
-                this.walls.forEach(function(wall) {
+            Floorplan.prototype.update = function () {
+                this.walls.forEach(function (wall) {
                     wall.resetFrontBack();
                 });
                 var roomCorners = this.findRooms(this.corners);
                 this.rooms = [];
                 var scope = this;
-                roomCorners.forEach(function(corners) {
+                roomCorners.forEach(function (corners) {
                     scope.rooms.push(new Model.Room(scope, corners));
                 });
                 this.assignOrphanEdges();
@@ -1806,19 +1833,19 @@ var BP3D;
             /**
              * Returns the center of the floorplan in the y plane
              */
-            Floorplan.prototype.getCenter = function() {
+            Floorplan.prototype.getCenter = function () {
                 return this.getDimensions(true);
             };
-            Floorplan.prototype.getSize = function() {
+            Floorplan.prototype.getSize = function () {
                 return this.getDimensions(false);
             };
-            Floorplan.prototype.getDimensions = function(center) {
+            Floorplan.prototype.getDimensions = function (center) {
                 center = center || false; // otherwise, get size
                 var xMin = Infinity;
                 var xMax = -Infinity;
                 var zMin = Infinity;
                 var zMax = -Infinity;
-                this.corners.forEach(function(corner) {
+                this.corners.forEach(function (corner) {
                     if (corner.x < xMin)
                         xMin = corner.x;
                     if (corner.x > xMax)
@@ -1831,23 +1858,25 @@ var BP3D;
                 var ret;
                 if (xMin == Infinity || xMax == -Infinity || zMin == Infinity || zMax == -Infinity) {
                     ret = new THREE.Vector3();
-                } else {
+                }
+                else {
                     if (center) {
                         // center
                         ret = new THREE.Vector3((xMin + xMax) * 0.5, 0, (zMin + zMax) * 0.5);
-                    } else {
+                    }
+                    else {
                         // size
                         ret = new THREE.Vector3((xMax - xMin), 0, (zMax - zMin));
                     }
                 }
                 return ret;
             };
-            Floorplan.prototype.assignOrphanEdges = function() {
+            Floorplan.prototype.assignOrphanEdges = function () {
                 // kinda hacky
                 // find orphaned wall segments (i.e. not part of rooms) and
                 // give them edges
                 var orphanWalls = [];
-                this.walls.forEach(function(wall) {
+                this.walls.forEach(function (wall) {
                     if (!wall.backEdge && !wall.frontEdge) {
                         wall.orphan = true;
                         var back = new Model.HalfEdge(null, wall, false);
@@ -1864,16 +1893,15 @@ var BP3D;
              * @param corners The corners of the floorplan.
              * @returns The rooms, each room as an array of corners.
              */
-            Floorplan.prototype.findRooms = function(corners) {
+            Floorplan.prototype.findRooms = function (corners) {
                 function _calculateTheta(previousCorner, currentCorner, nextCorner) {
                     var theta = BP3D.Core.Utils.angle2pi(previousCorner.x - currentCorner.x, previousCorner.y - currentCorner.y, nextCorner.x - currentCorner.x, nextCorner.y - currentCorner.y);
                     return theta;
                 }
-
                 function _removeDuplicateRooms(roomArray) {
                     var results = [];
                     var lookup = {};
-                    var hashFunc = function(corner) {
+                    var hashFunc = function (corner) {
                         return corner.id;
                     };
                     var sep = '-';
@@ -1895,7 +1923,6 @@ var BP3D;
                     }
                     return results;
                 }
-
                 function _findTightestCycle(firstCorner, secondCorner) {
                     var stack = [];
                     var next = {
@@ -1930,14 +1957,14 @@ var BP3D;
                         if (addToStack.length > 1) {
                             // visit the ones with smallest theta first
                             var previousCorner = next.previousCorners[next.previousCorners.length - 1];
-                            addToStack.sort(function(a, b) {
+                            addToStack.sort(function (a, b) {
                                 return (_calculateTheta(previousCorner, currentCorner, b) -
                                     _calculateTheta(previousCorner, currentCorner, a));
                             });
                         }
                         if (addToStack.length > 0) {
                             // add to the stack
-                            addToStack.forEach(function(corner) {
+                            addToStack.forEach(function (corner) {
                                 stack.push({
                                     corner: corner,
                                     previousCorners: previousCorners
@@ -1952,8 +1979,8 @@ var BP3D;
                 // find tightest loops, for each corner, for each adjacent
                 // TODO: optimize this, only check corners with > 2 adjacents, or isolated cycles
                 var loops = [];
-                corners.forEach(function(firstCorner) {
-                    firstCorner.adjacentCorners().forEach(function(secondCorner) {
+                corners.forEach(function (firstCorner) {
+                    firstCorner.adjacentCorners().forEach(function (secondCorner) {
                         loops.push(_findTightestCycle(firstCorner, secondCorner));
                     });
                 });
@@ -1973,45 +2000,47 @@ var BP3D;
 /// <reference path="item.ts" />
 /// <reference path="metadata.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Items;
-    (function(Items) {
+    (function (Items) {
         /**
          * A Floor Item is an entity to be placed related to a floor.
          */
-        var FloorItem = (function(_super) {
+        var FloorItem = (function (_super) {
             __extends(FloorItem, _super);
-
             function FloorItem(model, metadata, geometry, material, position, rotation, scale) {
                 _super.call(this, model, metadata, geometry, material, position, rotation, scale);
-            };
+            }
+            ;
             /** */
-            FloorItem.prototype.placeInRoom = function() {
+            FloorItem.prototype.placeInRoom = function () {
                 if (!this.position_set) {
                     var center = this.model.floorplan.getCenter();
                     this.position.x = center.x;
                     this.position.z = center.z;
                     this.position.y = 0.5 * (this.geometry.boundingBox.max.y - this.geometry.boundingBox.min.y);
                 }
-            };;
+            };
+            ;
             /** Take action after a resize */
-            FloorItem.prototype.resized = function() {
+            FloorItem.prototype.resized = function () {
                 this.position.y = this.halfSize.y;
             };
             /** */
-            FloorItem.prototype.moveToPosition = function(vec3, intersection) {
+            FloorItem.prototype.moveToPosition = function (vec3, intersection) {
                 // keeps the position in the room and on the floor
                 if (!this.isValidPosition(vec3)) {
                     this.showError(vec3);
                     return;
-                } else {
+                }
+                else {
                     this.hideError();
                     vec3.y = this.position.y; // keep it on the floor!
                     this.position.copy(vec3);
                 }
             };
             /** */
-            FloorItem.prototype.isValidPosition = function(vec3) {
+            FloorItem.prototype.isValidPosition = function (vec3) {
                 var corners = this.getCorners('x', 'z', vec3);
                 // check if we are in a room
                 var rooms = this.model.floorplan.getRooms();
@@ -2055,15 +2084,14 @@ var BP3D;
 /// <reference path="item.ts" />
 /// <reference path="metadata.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Items;
-    (function(Items) {
+    (function (Items) {
         /**
          * A Wall Item is an entity to be placed related to a wall.
          */
-        var WallItem = (function(_super) {
+        var WallItem = (function (_super) {
             __extends(WallItem, _super);
-
             function WallItem(model, metadata, geometry, material, position, rotation, scale) {
                 _super.call(this, model, metadata, geometry, material, position, rotation, scale);
                 /** The currently applied wall edge. */
@@ -2091,17 +2119,18 @@ var BP3D;
                 /** */
                 this.backVisible = false;
                 this.allowRotate = false;
-            };
+            }
+            ;
             /** Get the closet wall edge.
              * @returns The wall edge.
              */
-            WallItem.prototype.closestWallEdge = function() {
+            WallItem.prototype.closestWallEdge = function () {
                 var wallEdges = this.model.floorplan.wallEdges();
                 var wallEdge = null;
                 var minDistance = null;
                 var itemX = this.position.x;
                 var itemZ = this.position.z;
-                wallEdges.forEach(function(edge) {
+                wallEdges.forEach(function (edge) {
                     var distance = edge.distanceTo(itemX, itemZ);
                     if (minDistance === null || distance < minDistance) {
                         minDistance = distance;
@@ -2111,35 +2140,36 @@ var BP3D;
                 return wallEdge;
             };
             /** */
-            WallItem.prototype.removed = function() {
+            WallItem.prototype.removed = function () {
                 if (this.currentWallEdge != null && this.addToWall) {
                     BP3D.Core.Utils.removeValue(this.currentWallEdge.wall.items, this);
                     this.redrawWall();
                 }
             };
             /** */
-            WallItem.prototype.redrawWall = function() {
+            WallItem.prototype.redrawWall = function () {
                 if (this.addToWall) {
                     this.currentWallEdge.wall.fireRedraw();
                 }
             };
             /** */
-            WallItem.prototype.updateEdgeVisibility = function(visible, front) {
+            WallItem.prototype.updateEdgeVisibility = function (visible, front) {
                 if (front) {
                     this.frontVisible = visible;
-                } else {
+                }
+                else {
                     this.backVisible = visible;
                 }
                 this.visible = (this.frontVisible || this.backVisible);
             };
             /** */
-            WallItem.prototype.updateSize = function() {
+            WallItem.prototype.updateSize = function () {
                 this.wallOffsetScalar = (this.geometry.boundingBox.max.z - this.geometry.boundingBox.min.z) * this.scale.z / 2.0;
                 this.sizeX = (this.geometry.boundingBox.max.x - this.geometry.boundingBox.min.x) * this.scale.x;
                 this.sizeY = (this.geometry.boundingBox.max.y - this.geometry.boundingBox.min.y) * this.scale.y;
             };
             /** */
-            WallItem.prototype.resized = function() {
+            WallItem.prototype.resized = function () {
                 if (this.boundToFloor) {
                     this.position.y = 0.5 * (this.geometry.boundingBox.max.y - this.geometry.boundingBox.min.y) * this.scale.y + 0.01;
                 }
@@ -2147,7 +2177,7 @@ var BP3D;
                 this.redrawWall();
             };
             /** */
-            WallItem.prototype.placeInRoom = function() {
+            WallItem.prototype.placeInRoom = function () {
                 var closestWallEdge = this.closestWallEdge();
                 this.changeWallEdge(closestWallEdge);
                 this.updateSize();
@@ -2159,25 +2189,27 @@ var BP3D;
                     this.position.copy(newPos);
                     this.redrawWall();
                 }
-            };;
+            };
+            ;
             /** */
-            WallItem.prototype.moveToPosition = function(vec3, intersection) {
+            WallItem.prototype.moveToPosition = function (vec3, intersection) {
                 this.changeWallEdge(intersection.object.edge);
                 this.boundMove(vec3);
                 this.position.copy(vec3);
                 this.redrawWall();
             };
             /** */
-            WallItem.prototype.getWallOffset = function() {
+            WallItem.prototype.getWallOffset = function () {
                 return this.wallOffsetScalar;
             };
             /** */
-            WallItem.prototype.changeWallEdge = function(wallEdge) {
+            WallItem.prototype.changeWallEdge = function (wallEdge) {
                 if (this.currentWallEdge != null) {
                     if (this.addToWall) {
                         BP3D.Core.Utils.removeValue(this.currentWallEdge.wall.items, this);
                         this.redrawWall();
-                    } else {
+                    }
+                    else {
                         BP3D.Core.Utils.removeValue(this.currentWallEdge.wall.onItems, this);
                     }
                 }
@@ -2198,31 +2230,35 @@ var BP3D;
                 if (this.addToWall) {
                     wallEdge.wall.items.push(this);
                     this.redrawWall();
-                } else {
+                }
+                else {
                     wallEdge.wall.onItems.push(this);
                 }
             };
             /** Returns an array of planes to use other than the ground plane
              * for passing intersection to clickPressed and clickDragged */
-            WallItem.prototype.customIntersectionPlanes = function() {
+            WallItem.prototype.customIntersectionPlanes = function () {
                 return this.model.floorplan.wallEdgePlanes();
             };
             /** takes the move vec3, and makes sure object stays bounded on plane */
-            WallItem.prototype.boundMove = function(vec3) {
+            WallItem.prototype.boundMove = function (vec3) {
                 var tolerance = 1;
                 var edge = this.currentWallEdge;
                 vec3.applyMatrix4(edge.interiorTransform);
                 if (vec3.x < this.sizeX / 2.0 + tolerance) {
                     vec3.x = this.sizeX / 2.0 + tolerance;
-                } else if (vec3.x > (edge.interiorDistance() - this.sizeX / 2.0 - tolerance)) {
+                }
+                else if (vec3.x > (edge.interiorDistance() - this.sizeX / 2.0 - tolerance)) {
                     vec3.x = edge.interiorDistance() - this.sizeX / 2.0 - tolerance;
                 }
                 if (this.boundToFloor) {
                     vec3.y = 0.5 * (this.geometry.boundingBox.max.y - this.geometry.boundingBox.min.y) * this.scale.y + 0.01;
-                } else {
+                }
+                else {
                     if (vec3.y < this.sizeY / 2.0 + tolerance) {
                         vec3.y = this.sizeY / 2.0 + tolerance;
-                    } else if (vec3.y > edge.height - this.sizeY / 2.0 - tolerance) {
+                    }
+                    else if (vec3.y > edge.height - this.sizeY / 2.0 - tolerance) {
                         vec3.y = edge.height - this.sizeY / 2.0 - tolerance;
                     }
                 }
@@ -2239,19 +2275,19 @@ var BP3D;
 /// <reference path="wall_item.ts" />
 /// <reference path="metadata.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Items;
-    (function(Items) {
+    (function (Items) {
         /** */
-        var InWallItem = (function(_super) {
+        var InWallItem = (function (_super) {
             __extends(InWallItem, _super);
-
             function InWallItem(model, metadata, geometry, material, position, rotation, scale) {
                 _super.call(this, model, metadata, geometry, material, position, rotation, scale);
                 this.addToWall = true;
-            };
+            }
+            ;
             /** */
-            InWallItem.prototype.getWallOffset = function() {
+            InWallItem.prototype.getWallOffset = function () {
                 // fudge factor so it saves to the right wall
                 return -this.currentWallEdge.offset + 0.5;
             };
@@ -2265,17 +2301,17 @@ var BP3D;
 /// <reference path="in_wall_item.ts" />
 /// <reference path="metadata.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Items;
-    (function(Items) {
+    (function (Items) {
         /** */
-        var InWallFloorItem = (function(_super) {
+        var InWallFloorItem = (function (_super) {
             __extends(InWallFloorItem, _super);
-
             function InWallFloorItem(model, metadata, geometry, material, position, rotation, scale) {
                 _super.call(this, model, metadata, geometry, material, position, rotation, scale);
                 this.boundToFloor = true;
-            };
+            }
+            ;
             return InWallFloorItem;
         })(Items.InWallItem);
         Items.InWallFloorItem = InWallFloorItem;
@@ -2286,18 +2322,18 @@ var BP3D;
 /// <reference path="floor_item.ts" />
 /// <reference path="metadata.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Items;
-    (function(Items) {
+    (function (Items) {
         /** */
-        var OnFloorItem = (function(_super) {
+        var OnFloorItem = (function (_super) {
             __extends(OnFloorItem, _super);
-
             function OnFloorItem(model, metadata, geometry, material, position, rotation, scale) {
                 _super.call(this, model, metadata, geometry, material, position, rotation, scale);
                 this.obstructFloorMoves = false;
                 this.receiveShadow = true;
-            };
+            }
+            ;
             return OnFloorItem;
         })(Items.FloorItem);
         Items.OnFloorItem = OnFloorItem;
@@ -2308,17 +2344,17 @@ var BP3D;
 /// <reference path="wall_item.ts" />
 /// <reference path="metadata.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Items;
-    (function(Items) {
+    (function (Items) {
         /** */
-        var WallFloorItem = (function(_super) {
+        var WallFloorItem = (function (_super) {
             __extends(WallFloorItem, _super);
-
             function WallFloorItem(model, metadata, geometry, material, position, rotation, scale) {
                 _super.call(this, model, metadata, geometry, material, position, rotation, scale);
                 this.boundToFloor = true;
-            };
+            }
+            ;
             return WallFloorItem;
         })(Items.WallItem);
         Items.WallFloorItem = WallFloorItem;
@@ -2331,9 +2367,9 @@ var BP3D;
 /// <reference path="wall_floor_item.ts" />
 /// <reference path="wall_item.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Items;
-    (function(Items) {
+    (function (Items) {
         /** Enumeration of item types. */
         var item_types = {
             1: Items.FloorItem,
@@ -2344,10 +2380,11 @@ var BP3D;
             9: Items.WallFloorItem
         };
         /** Factory class to create items. */
-        var Factory = (function() {
-            function Factory() {}
+        var Factory = (function () {
+            function Factory() {
+            }
             /** Gets the class for the specified item. */
-            Factory.getClass = function(itemType) {
+            Factory.getClass = function (itemType) {
                 return item_types[itemType];
             };
             return Factory;
@@ -2360,13 +2397,13 @@ var BP3D;
 /// <reference path="../core/utils.ts" />
 /// <reference path="../items/factory.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Model;
-    (function(Model) {
+    (function (Model) {
         /**
          * The Scene is a manager of Items and also links to a ThreeJS scene.
          */
-        var Scene = (function() {
+        var Scene = (function () {
             /**
              * Constructs a scene.
              * @param model The associated model.
@@ -2393,39 +2430,39 @@ var BP3D;
             /** Adds a non-item, basically a mesh, to the scene.
              * @param mesh The mesh to be added.
              */
-            Scene.prototype.add = function(mesh) {
+            Scene.prototype.add = function (mesh) {
                 this.scene.add(mesh);
             };
             /** Removes a non-item, basically a mesh, from the scene.
              * @param mesh The mesh to be removed.
              */
-            Scene.prototype.remove = function(mesh) {
+            Scene.prototype.remove = function (mesh) {
                 this.scene.remove(mesh);
                 BP3D.Core.Utils.removeValue(this.items, mesh);
             };
             /** Gets the scene.
              * @returns The scene.
              */
-            Scene.prototype.getScene = function() {
+            Scene.prototype.getScene = function () {
                 return this.scene;
             };
             /** Gets the items.
              * @returns The items.
              */
-            Scene.prototype.getItems = function() {
+            Scene.prototype.getItems = function () {
                 return this.items;
             };
             /** Gets the count of items.
              * @returns The count.
              */
-            Scene.prototype.itemCount = function() {
+            Scene.prototype.itemCount = function () {
                 return this.items.length;
             };
             /** Removes all items. */
-            Scene.prototype.clearItems = function() {
+            Scene.prototype.clearItems = function () {
                 var items_copy = this.items;
                 var scope = this;
-                this.items.forEach(function(item) {
+                this.items.forEach(function (item) {
                     scope.removeItem(item, true);
                 });
                 this.items = [];
@@ -2435,7 +2472,7 @@ var BP3D;
              * @param item The item to be removed.
              * @param dontRemove If not set, also remove the item from the items list.
              */
-            Scene.prototype.removeItem = function(item, dontRemove) {
+            Scene.prototype.removeItem = function (item, dontRemove) {
                 dontRemove = dontRemove || false;
                 // use this for item meshes
                 this.itemRemovedCallbacks.fire(item);
@@ -2455,11 +2492,11 @@ var BP3D;
              * @param scale The initial scaling.
              * @param fixed True if fixed.
              */
-            Scene.prototype.addItem = function(itemType, fileName, metadata, position, rotation, scale, fixed) {
+            Scene.prototype.addItem = function (itemType, fileName, metadata, position, rotation, scale, fixed) {
                 itemType = itemType || 1;
                 var scope = this;
-                var loaderCallback = function(geometry, materials) {
-                    var item = new(BP3D.Items.Factory.getClass(itemType))(scope.model, metadata, geometry, new THREE.MeshFaceMaterial(materials), position, rotation, scale);
+                var loaderCallback = function (geometry, materials) {
+                    var item = new (BP3D.Items.Factory.getClass(itemType))(scope.model, metadata, geometry, new THREE.MeshFaceMaterial(materials), position, rotation, scale);
                     item.fixed = fixed || false;
                     scope.items.push(item);
                     scope.add(item);
@@ -2480,13 +2517,13 @@ var BP3D;
 /// <reference path="floorplan.ts" />
 /// <reference path="scene.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Model;
-    (function(Model_1) {
+    (function (Model_1) {
         /**
          * A Model connects a Floorplan and a Scene.
          */
-        var Model = (function() {
+        var Model = (function () {
             /** Constructs a new model.
              * @param textureDir The directory containing the textures.
              */
@@ -2502,7 +2539,7 @@ var BP3D;
                 this.floorplan = new Model_1.Floorplan();
                 this.scene = new Model_1.Scene(this, textureDir);
             }
-            Model.prototype.loadSerialized = function(json) {
+            Model.prototype.loadSerialized = function (json) {
                 // TODO: better documentation on serialization format.
                 // TODO: a much better serialization format.
                 this.roomLoadingCallbacks.fire();
@@ -2510,7 +2547,7 @@ var BP3D;
                 this.newRoom(data.floorplan, data.items);
                 this.roomLoadedCallbacks.fire();
             };
-            Model.prototype.exportSerialized = function() {
+            Model.prototype.exportSerialized = function () {
                 var items_arr = [];
                 var objects = this.scene.getItems();
                 for (var i = 0; i < objects.length; i++) {
@@ -2535,11 +2572,11 @@ var BP3D;
                 };
                 return JSON.stringify(room);
             };
-            Model.prototype.newRoom = function(floorplan, items) {
+            Model.prototype.newRoom = function (floorplan, items) {
                 var _this = this;
                 this.scene.clearItems();
                 this.floorplan.loadFloorplan(floorplan);
-                items.forEach(function(item) {
+                items.forEach(function (item) {
                     var position = new THREE.Vector3(item.xpos, item.ypos, item.zpos);
                     var metadata = {
                         itemName: item.item_name,
@@ -2566,9 +2603,9 @@ var BP3D;
 /// <reference path="../model/wall.ts" />
 /// <reference path="floorplanner.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Floorplanner;
-    (function(Floorplanner) {
+    (function (Floorplanner) {
         /** */
         Floorplanner.floorplannerModes = {
             MOVE: 0,
@@ -2576,18 +2613,18 @@ var BP3D;
             DELETE: 2
         };
         // grid parameters
-        var gridSpacing = 30; // pixels
-        var gridWidth = 0.5;
-        var gridColor = "#000000";
+        var gridSpacing = 20; // pixels
+        var gridWidth = 1;
+        var gridColor = "#f1f1f1";
         // room config
         var roomColor = "#f9f9f9";
         // wall config
         var wallWidth = 5;
         var wallWidthHover = 7;
-        var wallColor = "#01FF70";
-        var wallColorHover = "#01FF70";
-        var edgeColor = "#000000";
-        var edgeColorHover = "#000000";
+        var wallColor = "#dddddd";
+        var wallColorHover = "#008cba";
+        var edgeColor = "#888888";
+        var edgeColorHover = "#008cba";
         var edgeWidth = 1;
         var deleteColor = "#ff0000";
         // corner config
@@ -2598,7 +2635,7 @@ var BP3D;
         /**
          * The View to be used by a Floorplanner to render in/interact with.
          */
-        var FloorplannerView = (function() {
+        var FloorplannerView = (function () {
             /** */
             function FloorplannerView(floorplan, viewmodel, canvas) {
                 this.floorplan = floorplan;
@@ -2607,13 +2644,13 @@ var BP3D;
                 this.canvasElement = document.getElementById(canvas);
                 this.context = this.canvasElement.getContext('2d');
                 var scope = this;
-                $(window).resize(function() {
+                $(window).resize(function () {
                     scope.handleWindowResize();
                 });
                 this.handleWindowResize();
             }
             /** */
-            FloorplannerView.prototype.handleWindowResize = function() {
+            FloorplannerView.prototype.handleWindowResize = function () {
                 var canvasSel = $("#" + this.canvas);
                 var parent = canvasSel.parent();
                 canvasSel.height(parent.innerHeight());
@@ -2623,48 +2660,52 @@ var BP3D;
                 this.draw();
             };
             /** */
-            FloorplannerView.prototype.draw = function() {
+            FloorplannerView.prototype.draw = function () {
                 var _this = this;
                 this.context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
                 this.drawGrid();
-                this.floorplan.getRooms().forEach(function(room) {
+                this.floorplan.getRooms().forEach(function (room) {
                     _this.drawRoom(room);
                 });
-                this.floorplan.getWalls().forEach(function(wall) {
+                this.floorplan.getWalls().forEach(function (wall) {
                     _this.drawWall(wall);
                 });
-                this.floorplan.getCorners().forEach(function(corner) {
+                this.floorplan.getCorners().forEach(function (corner) {
                     _this.drawCorner(corner);
                 });
                 if (this.viewmodel.mode == Floorplanner.floorplannerModes.DRAW) {
                     this.drawTarget(this.viewmodel.targetX, this.viewmodel.targetY, this.viewmodel.lastNode);
                 }
-                this.floorplan.getWalls().forEach(function(wall) {
+                this.floorplan.getWalls().forEach(function (wall) {
                     _this.drawWallLabels(wall);
                 });
             };
             /** */
-            FloorplannerView.prototype.drawWallLabels = function(wall) {
+            FloorplannerView.prototype.drawWallLabels = function (wall) {
                 // we'll just draw the shorter label... idk
                 if (wall.backEdge && wall.frontEdge) {
                     if (wall.backEdge.interiorDistance < wall.frontEdge.interiorDistance) {
                         this.drawEdgeLabel(wall.backEdge);
-                    } else {
+                    }
+                    else {
                         this.drawEdgeLabel(wall.frontEdge);
                     }
-                } else if (wall.backEdge) {
+                }
+                else if (wall.backEdge) {
                     this.drawEdgeLabel(wall.backEdge);
-                } else if (wall.frontEdge) {
+                }
+                else if (wall.frontEdge) {
                     this.drawEdgeLabel(wall.frontEdge);
                 }
             };
             /** */
-            FloorplannerView.prototype.drawWall = function(wall) {
+            FloorplannerView.prototype.drawWall = function (wall) {
                 var hover = (wall === this.viewmodel.activeWall);
                 var color = wallColor;
                 if (hover && this.viewmodel.mode == Floorplanner.floorplannerModes.DELETE) {
                     color = deleteColor;
-                } else if (hover) {
+                }
+                else if (hover) {
                     color = wallColorHover;
                 }
                 this.drawLine(this.viewmodel.convertX(wall.getStartX()), this.viewmodel.convertY(wall.getStartY()), this.viewmodel.convertX(wall.getEndX()), this.viewmodel.convertY(wall.getEndY()), hover ? wallWidthHover : wallWidth, color);
@@ -2676,14 +2717,13 @@ var BP3D;
                 }
             };
             /** */
-            FloorplannerView.prototype.drawEdgeLabel = function(edge) {
+            FloorplannerView.prototype.drawEdgeLabel = function (edge) {
                 var pos = edge.interiorCenter();
                 var length = edge.interiorDistance();
                 if (length < 60) {
                     // dont draw labels on walls this short
                     return;
                 }
-                this.context.globalAlpha = 0.5;
                 this.context.font = "normal 12px Arial";
                 this.context.fillStyle = "#000000";
                 this.context.textBaseline = "middle";
@@ -2694,50 +2734,52 @@ var BP3D;
                 this.context.fillText(BP3D.Core.Dimensioning.cmToMeasure(length), this.viewmodel.convertX(pos.x), this.viewmodel.convertY(pos.y));
             };
             /** */
-            FloorplannerView.prototype.drawEdge = function(edge, hover) {
+            FloorplannerView.prototype.drawEdge = function (edge, hover) {
                 var color = edgeColor;
                 if (hover && this.viewmodel.mode == Floorplanner.floorplannerModes.DELETE) {
                     color = deleteColor;
-                } else if (hover) {
+                }
+                else if (hover) {
                     color = edgeColorHover;
                 }
                 var corners = edge.corners();
                 var scope = this;
-                this.drawPolygon(BP3D.Core.Utils.map(corners, function(corner) {
+                this.drawPolygon(BP3D.Core.Utils.map(corners, function (corner) {
                     return scope.viewmodel.convertX(corner.x);
-                }), BP3D.Core.Utils.map(corners, function(corner) {
+                }), BP3D.Core.Utils.map(corners, function (corner) {
                     return scope.viewmodel.convertY(corner.y);
                 }), false, null, true, color, edgeWidth);
             };
             /** */
-            FloorplannerView.prototype.drawRoom = function(room) {
+            FloorplannerView.prototype.drawRoom = function (room) {
                 var scope = this;
-                this.drawPolygon(BP3D.Core.Utils.map(room.corners, function(corner) {
+                this.drawPolygon(BP3D.Core.Utils.map(room.corners, function (corner) {
                     return scope.viewmodel.convertX(corner.x);
-                }), BP3D.Core.Utils.map(room.corners, function(corner) {
+                }), BP3D.Core.Utils.map(room.corners, function (corner) {
                     return scope.viewmodel.convertY(corner.y);
                 }), true, roomColor);
             };
             /** */
-            FloorplannerView.prototype.drawCorner = function(corner) {
+            FloorplannerView.prototype.drawCorner = function (corner) {
                 var hover = (corner === this.viewmodel.activeCorner);
                 var color = cornerColor;
                 if (hover && this.viewmodel.mode == Floorplanner.floorplannerModes.DELETE) {
                     color = deleteColor;
-                } else if (hover) {
+                }
+                else if (hover) {
                     color = cornerColorHover;
                 }
                 this.drawCircle(this.viewmodel.convertX(corner.x), this.viewmodel.convertY(corner.y), hover ? cornerRadiusHover : cornerRadius, color);
             };
             /** */
-            FloorplannerView.prototype.drawTarget = function(x, y, lastNode) {
+            FloorplannerView.prototype.drawTarget = function (x, y, lastNode) {
                 this.drawCircle(this.viewmodel.convertX(x), this.viewmodel.convertY(y), cornerRadiusHover, cornerColorHover);
                 if (this.viewmodel.lastNode) {
                     this.drawLine(this.viewmodel.convertX(lastNode.x), this.viewmodel.convertY(lastNode.y), this.viewmodel.convertX(x), this.viewmodel.convertY(y), wallWidthHover, wallColorHover);
                 }
             };
             /** */
-            FloorplannerView.prototype.drawLine = function(startX, startY, endX, endY, width, color) {
+            FloorplannerView.prototype.drawLine = function (startX, startY, endX, endY, width, color) {
                 // width is an integer
                 // color is a hex string, i.e. #ff0000
                 this.context.beginPath();
@@ -2748,7 +2790,7 @@ var BP3D;
                 this.context.stroke();
             };
             /** */
-            FloorplannerView.prototype.drawPolygon = function(xArr, yArr, fill, fillColor, stroke, strokeColor, strokeWidth) {
+            FloorplannerView.prototype.drawPolygon = function (xArr, yArr, fill, fillColor, stroke, strokeColor, strokeWidth) {
                 // fillColor is a hex string, i.e. #ff0000
                 fill = fill || false;
                 stroke = stroke || false;
@@ -2769,22 +2811,23 @@ var BP3D;
                 }
             };
             /** */
-            FloorplannerView.prototype.drawCircle = function(centerX, centerY, radius, fillColor) {
+            FloorplannerView.prototype.drawCircle = function (centerX, centerY, radius, fillColor) {
                 this.context.beginPath();
                 this.context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
                 this.context.fillStyle = fillColor;
                 this.context.fill();
             };
             /** returns n where -gridSize/2 < n <= gridSize/2  */
-            FloorplannerView.prototype.calculateGridOffset = function(n) {
+            FloorplannerView.prototype.calculateGridOffset = function (n) {
                 if (n >= 0) {
                     return (n + gridSpacing / 2.0) % gridSpacing - gridSpacing / 2.0;
-                } else {
+                }
+                else {
                     return (n - gridSpacing / 2.0) % gridSpacing + gridSpacing / 2.0;
                 }
             };
             /** */
-            FloorplannerView.prototype.drawGrid = function() {
+            FloorplannerView.prototype.drawGrid = function () {
                 var offsetX = this.calculateGridOffset(-this.viewmodel.originX);
                 var offsetY = this.calculateGridOffset(-this.viewmodel.originY);
                 var width = this.canvasElement.width;
@@ -2805,15 +2848,15 @@ var BP3D;
 /// <reference path="../model/floorplan.ts" />
 /// <reference path="floorplanner_view.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Floorplanner;
-    (function(Floorplanner_1) {
+    (function (Floorplanner_1) {
         /** how much will we move a corner to make a wall axis aligned (cm) */
         var snapTolerance = 25;
         /**
          * The Floorplanner implements an interactive tool for creation of floorplans.
          */
-        var Floorplanner = (function() {
+        var Floorplanner = (function () {
             /** */
             function Floorplanner(canvas, floorplan) {
                 this.floorplan = floorplan;
@@ -2861,52 +2904,55 @@ var BP3D;
                 // Initialization:
                 this.setMode(Floorplanner_1.floorplannerModes.MOVE);
                 var scope = this;
-                this.canvasElement.mousedown(function() {
+                this.canvasElement.mousedown(function () {
                     scope.mousedown();
                 });
-                this.canvasElement.mousemove(function(event) {
+                this.canvasElement.mousemove(function (event) {
                     scope.mousemove(event);
                 });
-                this.canvasElement.mouseup(function() {
+                this.canvasElement.mouseup(function () {
                     scope.mouseup();
                 });
-                this.canvasElement.mouseleave(function() {
+                this.canvasElement.mouseleave(function () {
                     scope.mouseleave();
                 });
-                $(document).keyup(function(e) {
+                $(document).keyup(function (e) {
                     if (e.keyCode == 27) {
                         scope.escapeKey();
                     }
                 });
-                floorplan.roomLoadedCallbacks.add(function() {
+                floorplan.roomLoadedCallbacks.add(function () {
                     scope.reset();
                 });
             }
             /** */
-            Floorplanner.prototype.escapeKey = function() {
+            Floorplanner.prototype.escapeKey = function () {
                 this.setMode(Floorplanner_1.floorplannerModes.MOVE);
             };
             /** */
-            Floorplanner.prototype.updateTarget = function() {
+            Floorplanner.prototype.updateTarget = function () {
                 if (this.mode == Floorplanner_1.floorplannerModes.DRAW && this.lastNode) {
                     if (Math.abs(this.mouseX - this.lastNode.x) < snapTolerance) {
                         this.targetX = this.lastNode.x;
-                    } else {
+                    }
+                    else {
                         this.targetX = this.mouseX;
                     }
                     if (Math.abs(this.mouseY - this.lastNode.y) < snapTolerance) {
                         this.targetY = this.lastNode.y;
-                    } else {
+                    }
+                    else {
                         this.targetY = this.mouseY;
                     }
-                } else {
+                }
+                else {
                     this.targetX = this.mouseX;
                     this.targetY = this.mouseY;
                 }
                 this.view.draw();
             };
             /** */
-            Floorplanner.prototype.mousedown = function() {
+            Floorplanner.prototype.mousedown = function () {
                 this.mouseDown = true;
                 this.mouseMoved = false;
                 this.lastX = this.rawMouseX;
@@ -2915,15 +2961,17 @@ var BP3D;
                 if (this.mode == Floorplanner_1.floorplannerModes.DELETE) {
                     if (this.activeCorner) {
                         this.activeCorner.removeAll();
-                    } else if (this.activeWall) {
+                    }
+                    else if (this.activeWall) {
                         this.activeWall.remove();
-                    } else {
+                    }
+                    else {
                         this.setMode(Floorplanner_1.floorplannerModes.MOVE);
                     }
                 }
             };
             /** */
-            Floorplanner.prototype.mousemove = function(event) {
+            Floorplanner.prototype.mousemove = function (event) {
                 this.mouseMoved = true;
                 // update mouse
                 this.rawMouseX = event.clientX;
@@ -2949,7 +2997,8 @@ var BP3D;
                             this.activeWall = hoverWall;
                             draw = true;
                         }
-                    } else {
+                    }
+                    else {
                         this.activeWall = null;
                     }
                     if (draw) {
@@ -2969,7 +3018,8 @@ var BP3D;
                     if (this.activeCorner) {
                         this.activeCorner.move(this.mouseX, this.mouseY);
                         this.activeCorner.snapToAxis(snapTolerance);
-                    } else if (this.activeWall) {
+                    }
+                    else if (this.activeWall) {
                         this.activeWall.relativeMove((this.rawMouseX - this.lastX) * this.cmPerPixel, (this.rawMouseY - this.lastY) * this.cmPerPixel);
                         this.activeWall.snapToAxis(snapTolerance);
                         this.lastX = this.rawMouseX;
@@ -2979,7 +3029,7 @@ var BP3D;
                 }
             };
             /** */
-            Floorplanner.prototype.mouseup = function() {
+            Floorplanner.prototype.mouseup = function () {
                 this.mouseDown = false;
                 // drawing
                 if (this.mode == Floorplanner_1.floorplannerModes.DRAW && !this.mouseMoved) {
@@ -2994,30 +3044,30 @@ var BP3D;
                 }
             };
             /** */
-            Floorplanner.prototype.mouseleave = function() {
+            Floorplanner.prototype.mouseleave = function () {
                 this.mouseDown = false;
                 //scope.setMode(scope.modes.MOVE);
             };
             /** */
-            Floorplanner.prototype.reset = function() {
+            Floorplanner.prototype.reset = function () {
                 this.resizeView();
                 this.setMode(Floorplanner_1.floorplannerModes.MOVE);
                 this.resetOrigin();
                 this.view.draw();
             };
             /** */
-            Floorplanner.prototype.resizeView = function() {
+            Floorplanner.prototype.resizeView = function () {
                 this.view.handleWindowResize();
             };
             /** */
-            Floorplanner.prototype.setMode = function(mode) {
+            Floorplanner.prototype.setMode = function (mode) {
                 this.lastNode = null;
                 this.mode = mode;
                 this.modeResetCallbacks.fire(mode);
                 this.updateTarget();
             };
             /** Sets the origin so that floorplan is centered */
-            Floorplanner.prototype.resetOrigin = function() {
+            Floorplanner.prototype.resetOrigin = function () {
                 var centerX = this.canvasElement.innerWidth() / 2.0;
                 var centerY = this.canvasElement.innerHeight() / 2.0;
                 var centerFloorplan = this.floorplan.getCenter();
@@ -3025,11 +3075,11 @@ var BP3D;
                 this.originY = centerFloorplan.z * this.pixelsPerCm - centerY;
             };
             /** Convert from THREEjs coords to canvas coords. */
-            Floorplanner.prototype.convertX = function(x) {
+            Floorplanner.prototype.convertX = function (x) {
                 return (x - this.originX * this.cmPerPixel) * this.pixelsPerCm;
             };
             /** Convert from THREEjs coords to canvas coords. */
-            Floorplanner.prototype.convertY = function(y) {
+            Floorplanner.prototype.convertY = function (y) {
                 return (y - this.originY * this.cmPerPixel) * this.pixelsPerCm;
             };
             return Floorplanner;
@@ -3041,10 +3091,10 @@ var BP3D;
 /// <reference path="../../lib/three.d.ts" />
 /// <reference path="../core/utils.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Three;
-    (function(Three) {
-        Three.Controller = function(three, model, camera, element, controls, hud) {
+    (function (Three) {
+        Three.Controller = function (three, model, camera, element, controls, hud) {
             var scope = this;
             this.enabled = true;
             var three = three;
@@ -3072,7 +3122,6 @@ var BP3D;
             };
             var state = states.UNSELECTED;
             this.needsUpdate = true;
-
             function init() {
                 element.mousedown(mouseDownEvent);
                 element.mouseup(mouseUpEvent);
@@ -3094,7 +3143,6 @@ var BP3D;
                 }
                 item.position_set = true;
             }
-
             function clickPressed(vec2) {
                 vec2 = vec2 || mouse;
                 var intersection = scope.itemIntersection(mouse, selectedObject);
@@ -3102,19 +3150,18 @@ var BP3D;
                     selectedObject.clickPressed(intersection);
                 }
             }
-
             function clickDragged(vec2) {
                 vec2 = vec2 || mouse;
                 var intersection = scope.itemIntersection(mouse, selectedObject);
                 if (intersection) {
                     if (scope.isRotating()) {
                         selectedObject.rotate(intersection);
-                    } else {
+                    }
+                    else {
                         selectedObject.clickDragged(intersection);
                     }
                 }
             }
-
             function itemRemoved(item) {
                 // invoked as a callback to event in Scene
                 if (item === selectedObject) {
@@ -3123,7 +3170,6 @@ var BP3D;
                     scope.setSelectedObject(null);
                 }
             }
-
             function setGroundPlane() {
                 // ground plane used to find intersections
                 var size = 10000;
@@ -3132,7 +3178,6 @@ var BP3D;
                 plane.visible = false;
                 scene.add(plane);
             }
-
             function checkWallsAndFloors(event) {
                 // double click on a wall or floor brings up texture change modal
                 if (state == states.UNSELECTED && mouseoverObject == null) {
@@ -3155,7 +3200,6 @@ var BP3D;
                     three.nothingClicked.fire();
                 }
             }
-
             function mouseMoveEvent(event) {
                 if (scope.enabled) {
                     event.preventDefault();
@@ -3182,10 +3226,9 @@ var BP3D;
                     }
                 }
             }
-            this.isRotating = function() {
+            this.isRotating = function () {
                 return (state == states.ROTATING || state == states.ROTATING_FREE);
             };
-
             function mouseDownEvent(event) {
                 if (scope.enabled) {
                     event.preventDefault();
@@ -3195,7 +3238,8 @@ var BP3D;
                         case states.SELECTED:
                             if (rotateMouseOver) {
                                 switchState(states.ROTATING);
-                            } else if (intersectedObject != null) {
+                            }
+                            else if (intersectedObject != null) {
                                 scope.setSelectedObject(intersectedObject);
                                 if (!intersectedObject.fixed) {
                                     switchState(states.DRAGGING);
@@ -3219,7 +3263,6 @@ var BP3D;
                     }
                 }
             }
-
             function mouseUpEvent(event) {
                 if (scope.enabled) {
                     mouseDown = false;
@@ -3231,7 +3274,8 @@ var BP3D;
                         case states.ROTATING:
                             if (!mouseMoved) {
                                 switchState(states.ROTATING_FREE);
-                            } else {
+                            }
+                            else {
                                 switchState(states.SELECTED);
                             }
                             break;
@@ -3251,7 +3295,6 @@ var BP3D;
                     }
                 }
             }
-
             function switchState(newState) {
                 if (newState != state) {
                     onExit(state);
@@ -3260,7 +3303,6 @@ var BP3D;
                 state = newState;
                 hud.setRotating(scope.isRotating());
             }
-
             function onEntry(state) {
                 switch (state) {
                     case states.UNSELECTED:
@@ -3279,7 +3321,6 @@ var BP3D;
                         break;
                 }
             }
-
             function onExit(state) {
                 switch (state) {
                     case states.UNSELECTED:
@@ -3288,7 +3329,8 @@ var BP3D;
                     case states.DRAGGING:
                         if (mouseoverObject) {
                             three.setCursorStyle("pointer");
-                        } else {
+                        }
+                        else {
                             three.setCursorStyle("auto");
                         }
                         break;
@@ -3297,7 +3339,7 @@ var BP3D;
                         break;
                 }
             }
-            this.selectedObject = function() {
+            this.selectedObject = function () {
                 return selectedObject;
             };
             // updates the vector of the intersection with the plane of a given
@@ -3322,7 +3364,8 @@ var BP3D;
                 var intersects = scope.getIntersections(mouse, items, false, true);
                 if (intersects.length > 0) {
                     intersectedObject = intersects[0].object;
-                } else {
+                }
+                else {
                     intersectedObject = null;
                 }
             }
@@ -3341,23 +3384,25 @@ var BP3D;
                 return vector;
             }
             // returns the first intersection object
-            this.itemIntersection = function(vec2, item) {
+            this.itemIntersection = function (vec2, item) {
                 var customIntersections = item.customIntersectionPlanes();
                 var intersections = null;
                 if (customIntersections && customIntersections.length > 0) {
                     intersections = this.getIntersections(vec2, customIntersections, true);
-                } else {
+                }
+                else {
                     intersections = this.getIntersections(vec2, plane);
                 }
                 if (intersections.length > 0) {
                     return intersections[0];
-                } else {
+                }
+                else {
                     return null;
                 }
             };
             // filter by normals will only return objects facing the camera
             // objects can be an array of objects or a single object
-            this.getIntersections = function(vec2, objects, filterByNormals, onlyVisible, recursive, linePrecision) {
+            this.getIntersections = function (vec2, objects, filterByNormals, onlyVisible, recursive, linePrecision) {
                 var vector = mouseToVec3(vec2);
                 onlyVisible = onlyVisible || false;
                 filterByNormals = filterByNormals || false;
@@ -3369,18 +3414,19 @@ var BP3D;
                 var intersections;
                 if (objects instanceof Array) {
                     intersections = raycaster.intersectObjects(objects, recursive);
-                } else {
+                }
+                else {
                     intersections = raycaster.intersectObject(objects, recursive);
                 }
                 // filter by visible, if true
                 if (onlyVisible) {
-                    intersections = BP3D.Core.Utils.removeIf(intersections, function(intersection) {
+                    intersections = BP3D.Core.Utils.removeIf(intersections, function (intersection) {
                         return !intersection.object.visible;
                     });
                 }
                 // filter by normals, if true
                 if (filterByNormals) {
-                    intersections = BP3D.Core.Utils.removeIf(intersections, function(intersection) {
+                    intersections = BP3D.Core.Utils.removeIf(intersections, function (intersection) {
                         var dot = intersection.face.normal.dot(direction);
                         return (dot > 0);
                     });
@@ -3388,7 +3434,7 @@ var BP3D;
                 return intersections;
             };
             // manage the selected object
-            this.setSelectedObject = function(object) {
+            this.setSelectedObject = function (object) {
                 if (state === states.UNSELECTED) {
                     switchState(states.SELECTED);
                 }
@@ -3399,7 +3445,8 @@ var BP3D;
                     selectedObject = object;
                     selectedObject.setSelected();
                     three.itemSelectedCallbacks.fire(object);
-                } else {
+                }
+                else {
                     selectedObject = null;
                     three.itemUnselectedCallbacks.fire();
                 }
@@ -3414,14 +3461,18 @@ var BP3D;
                             mouseoverObject = intersectedObject;
                             mouseoverObject.mouseOver();
                             scope.needsUpdate = true;
-                        } else {}
-                    } else {
+                        }
+                        else {
+                        }
+                    }
+                    else {
                         mouseoverObject = intersectedObject;
                         mouseoverObject.mouseOver();
                         three.setCursorStyle("pointer");
                         scope.needsUpdate = true;
                     }
-                } else if (mouseoverObject != null) {
+                }
+                else if (mouseoverObject != null) {
                     mouseoverObject.mouseOff();
                     three.setCursorStyle("auto");
                     mouseoverObject = null;
@@ -3435,30 +3486,27 @@ var BP3D;
 /// <reference path="../../lib/three.d.ts" />
 /// <reference path="../core/utils.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Three;
-    (function(Three) {
-        Three.Floor = function(scene, room) {
+    (function (Three) {
+        Three.Floor = function (scene, room) {
             var scope = this;
             this.room = room;
             var scene = scene;
             var floorPlane = null;
             var roofPlane = null;
             init();
-
             function init() {
                 scope.room.fireOnFloorChange(redraw);
                 floorPlane = buildFloor();
                 // roofs look weird, so commented out
                 //roofPlane = buildRoof();
             }
-
             function redraw() {
                 scope.removeFromScene();
                 floorPlane = buildFloor();
                 scope.addToScene();
             }
-
             function buildFloor() {
                 var textureSettings = scope.room.getTexture();
                 // setup texture
@@ -3477,7 +3525,7 @@ var BP3D;
                 // http://stackoverflow.com/questions/19182298/how-to-texture-a-three-js-mesh-created-with-shapegeometry
                 // scale down coords to fit 0 -> 1, then rescale
                 var points = [];
-                scope.room.interiorCorners.forEach(function(corner) {
+                scope.room.interiorCorners.forEach(function (corner) {
                     points.push(new THREE.Vector2(corner.x / textureScale, corner.y / textureScale));
                 });
                 var shape = new THREE.Shape(points);
@@ -3489,7 +3537,6 @@ var BP3D;
                 floor.castShadow = false;
                 return floor;
             }
-
             function buildRoof() {
                 // setup texture
                 var roofMaterial = new THREE.MeshBasicMaterial({
@@ -3497,7 +3544,7 @@ var BP3D;
                     color: 0xe5e5e5
                 });
                 var points = [];
-                scope.room.interiorCorners.forEach(function(corner) {
+                scope.room.interiorCorners.forEach(function (corner) {
                     points.push(new THREE.Vector2(corner.x, corner.y));
                 });
                 var shape = new THREE.Shape(points);
@@ -3507,13 +3554,13 @@ var BP3D;
                 roof.position.y = 250;
                 return roof;
             }
-            this.addToScene = function() {
+            this.addToScene = function () {
                 scene.add(floorPlane);
                 //scene.add(roofPlane);
                 // hack so we can do intersect testing
                 scene.add(room.floorPlane);
             };
-            this.removeFromScene = function() {
+            this.removeFromScene = function () {
                 scene.remove(floorPlane);
                 //scene.remove(roofPlane);
                 scene.remove(room.floorPlane);
@@ -3525,10 +3572,10 @@ var BP3D;
 /// <reference path="../../lib/three.d.ts" />
 /// <reference path="../core/utils.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Three;
-    (function(Three) {
-        Three.Edge = function(scene, edge, controls) {
+    (function (Three) {
+        Three.Edge = function (scene, edge, controls) {
             var scope = this;
             var scene = scene;
             var edge = edge;
@@ -3543,12 +3590,11 @@ var BP3D;
             var sideColor = 0xcccccc;
             var baseColor = 0xdddddd;
             this.visible = false;
-            this.remove = function() {
+            this.remove = function () {
                 edge.redrawCallbacks.remove(redraw);
                 controls.cameraMovedCallbacks.remove(updateVisibility);
                 removeFromScene();
             };
-
             function init() {
                 edge.redrawCallbacks.add(redraw);
                 controls.cameraMovedCallbacks.add(updateVisibility);
@@ -3556,35 +3602,31 @@ var BP3D;
                 updatePlanes();
                 addToScene();
             }
-
             function redraw() {
                 removeFromScene();
                 updateTexture();
                 updatePlanes();
                 addToScene();
             }
-
             function removeFromScene() {
-                planes.forEach(function(plane) {
+                planes.forEach(function (plane) {
                     scene.remove(plane);
                 });
-                basePlanes.forEach(function(plane) {
+                basePlanes.forEach(function (plane) {
                     scene.remove(plane);
                 });
                 planes = [];
                 basePlanes = [];
             }
-
             function addToScene() {
-                planes.forEach(function(plane) {
+                planes.forEach(function (plane) {
                     scene.add(plane);
                 });
-                basePlanes.forEach(function(plane) {
+                basePlanes.forEach(function (plane) {
                     scene.add(plane);
                 });
                 updateVisibility();
             }
-
             function updateVisibility() {
                 // finds the normal from the specified edge
                 var start = edge.interiorStart();
@@ -3603,24 +3645,22 @@ var BP3D;
                 // update visible
                 scope.visible = (dot >= 0);
                 // show or hide plans
-                planes.forEach(function(plane) {
+                planes.forEach(function (plane) {
                     plane.visible = scope.visible;
                 });
                 updateObjectVisibility();
             }
-
             function updateObjectVisibility() {
-                wall.items.forEach(function(item) {
+                wall.items.forEach(function (item) {
                     item.updateEdgeVisibility(scope.visible, front);
                 });
-                wall.onItems.forEach(function(item) {
+                wall.onItems.forEach(function (item) {
                     item.updateEdgeVisibility(scope.visible, front);
                 });
             }
-
             function updateTexture(callback) {
                 // callback is fired when texture loads
-                callback = callback || function() {
+                callback = callback || function () {
                     scene.needsUpdate = true;
                 };
                 var textureData = edge.getTexture();
@@ -3637,7 +3677,6 @@ var BP3D;
                     texture.needsUpdate = true;
                 }
             }
-
             function updatePlanes() {
                 var wallMaterial = new THREE.MeshBasicMaterial({
                     color: 0xffffff,
@@ -3672,7 +3711,7 @@ var BP3D;
                 var v4 = v1.clone();
                 v4.y = wall.height;
                 var points = [v1.clone(), v2.clone(), v3.clone(), v4.clone()];
-                points.forEach(function(p) {
+                points.forEach(function (p) {
                     p.applyMatrix4(transform);
                 });
                 var shape = new THREE.Shape([
@@ -3682,7 +3721,7 @@ var BP3D;
                     new THREE.Vector2(points[3].x, points[3].y)
                 ]);
                 // add holes for each wall item
-                wall.items.forEach(function(item) {
+                wall.items.forEach(function (item) {
                     var pos = item.position.clone();
                     pos.applyMatrix4(transform);
                     var halfSize = item.halfSize;
@@ -3699,28 +3738,26 @@ var BP3D;
                     shape.holes.push(new THREE.Path(holePoints));
                 });
                 var geometry = new THREE.ShapeGeometry(shape);
-                geometry.vertices.forEach(function(v) {
+                geometry.vertices.forEach(function (v) {
                     v.applyMatrix4(invTransform);
                 });
                 // make UVs
                 var totalDistance = BP3D.Core.Utils.distance(v1.x, v1.z, v2.x, v2.z);
                 var height = wall.height;
                 geometry.faceVertexUvs[0] = [];
-
                 function vertexToUv(vertex) {
                     var x = BP3D.Core.Utils.distance(v1.x, v1.z, vertex.x, vertex.z) / totalDistance;
                     var y = vertex.y / height;
                     return new THREE.Vector2(x, y);
                 }
-                geometry.faces.forEach(function(face) {
+                geometry.faces.forEach(function (face) {
                     var vertA = geometry.vertices[face.a];
                     var vertB = geometry.vertices[face.b];
                     var vertC = geometry.vertices[face.c];
                     geometry.faceVertexUvs[0].push([
                         vertexToUv(vertA),
                         vertexToUv(vertB),
-                        vertexToUv(vertC)
-                    ]);
+                        vertexToUv(vertC)]);
                 });
                 geometry.faceVertexUvs[1] = geometry.faceVertexUvs[0];
                 geometry.computeFaceNormals();
@@ -3728,7 +3765,6 @@ var BP3D;
                 var mesh = new THREE.Mesh(geometry, material);
                 return mesh;
             }
-
             function buildSideFillter(p1, p2, height, color) {
                 var points = [
                     toVec3(p1),
@@ -3737,7 +3773,7 @@ var BP3D;
                     toVec3(p1, height)
                 ];
                 var geometry = new THREE.Geometry();
-                points.forEach(function(p) {
+                points.forEach(function (p) {
                     geometry.vertices.push(p);
                 });
                 geometry.faces.push(new THREE.Face3(0, 1, 2));
@@ -3749,7 +3785,6 @@ var BP3D;
                 var filler = new THREE.Mesh(geometry, fillerMaterial);
                 return filler;
             }
-
             function buildFiller(edge, height, side, color) {
                 var points = [
                     toVec2(edge.exteriorStart()),
@@ -3768,11 +3803,9 @@ var BP3D;
                 filler.position.y = height;
                 return filler;
             }
-
             function toVec2(pos) {
                 return new THREE.Vector2(pos.x, pos.y);
             }
-
             function toVec3(pos, height) {
                 height = height || 0;
                 return new THREE.Vector3(pos.x, height, pos.y);
@@ -3785,10 +3818,10 @@ var BP3D;
 /// <reference path="floor.ts" />
 /// <reference path="edge.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Three;
-    (function(Three) {
-        Three.Floorplan = function(scene, floorplan, controls) {
+    (function (Three) {
+        Three.Floorplan = function (scene, floorplan, controls) {
             var scope = this;
             this.scene = scene;
             this.floorplan = floorplan;
@@ -3796,25 +3829,24 @@ var BP3D;
             this.floors = [];
             this.edges = [];
             floorplan.fireOnUpdatedRooms(redraw);
-
             function redraw() {
                 // clear scene
-                scope.floors.forEach(function(floor) {
+                scope.floors.forEach(function (floor) {
                     floor.removeFromScene();
                 });
-                scope.edges.forEach(function(edge) {
+                scope.edges.forEach(function (edge) {
                     edge.remove();
                 });
                 scope.floors = [];
                 scope.edges = [];
                 // draw floors
-                scope.floorplan.getRooms().forEach(function(room) {
+                scope.floorplan.getRooms().forEach(function (room) {
                     var threeFloor = new Three.Floor(scene, room);
                     scope.floors.push(threeFloor);
                     threeFloor.addToScene();
                 });
                 // draw edges
-                scope.floorplan.wallEdges().forEach(function(edge) {
+                scope.floorplan.wallEdges().forEach(function (edge) {
                     var threeEdge = new Three.Edge(scene, edge, scope.controls);
                     scope.edges.push(threeEdge);
                 });
@@ -3824,20 +3856,19 @@ var BP3D;
 })(BP3D || (BP3D = {}));
 /// <reference path="../../lib/three.d.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Three;
-    (function(Three) {
-        Three.Lights = function(scene, floorplan) {
+    (function (Three) {
+        Three.Lights = function (scene, floorplan) {
             var scope = this;
             var scene = scene;
             var floorplan = floorplan;
             var tol = 1;
             var height = 300; // TODO: share with Blueprint.Wall
             var dirLight;
-            this.getDirLight = function() {
+            this.getDirLight = function () {
                 return dirLight;
             };
-
             function init() {
                 var light = new THREE.HemisphereLight(0xffffff, 0x888888, 1.1);
                 light.position.set(0, height, 0);
@@ -3856,7 +3887,6 @@ var BP3D;
                 scene.add(dirLight.target);
                 floorplan.fireOnUpdatedRooms(updateShadowCamera);
             }
-
             function updateShadowCamera() {
                 var size = floorplan.getSize();
                 var d = (Math.max(size.z, size.x) + tol) / 2.0;
@@ -3885,10 +3915,10 @@ var BP3D;
 })(BP3D || (BP3D = {}));
 /// <reference path="../../lib/three.d.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Three;
-    (function(Three) {
-        Three.Skybox = function(scene) {
+    (function (Three) {
+        Three.Skybox = function (scene) {
             var scope = this;
             var scene = scene;
             var topColor = 0xffffff; //0xD8ECF9
@@ -3915,7 +3945,6 @@ var BP3D;
                 "  gl_FragColor = vec4( mix( bottomColor, topColor, (h + 1.0) / 2.0), 1.0 );",
                 "}"
             ].join('\n');
-
             function init() {
                 var uniforms = {
                     topColor: {
@@ -3957,10 +3986,10 @@ Contributors:
 /// <reference path="../../lib/jQuery.d.ts" />
 /// <reference path="../../lib/three.d.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Three;
-    (function(Three) {
-        Three.Controls = function(object, domElement) {
+    (function (Three) {
+        Three.Controls = function (object, domElement) {
             this.object = object;
             this.domElement = (domElement !== undefined) ? domElement : document;
             // Set to false to disable this control
@@ -4014,32 +4043,32 @@ var BP3D;
             var pan = new THREE.Vector3();
             var STATE = { NONE: -1, ROTATE: 0, DOLLY: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_DOLLY: 4, TOUCH_PAN: 5 };
             var state = STATE.NONE;
-            this.controlsActive = function() {
+            this.controlsActive = function () {
                 return (state === STATE.NONE);
             };
-            this.setPan = function(vec3) {
+            this.setPan = function (vec3) {
                 pan = vec3;
             };
-            this.panTo = function(vec3) {
+            this.panTo = function (vec3) {
                 var newTarget = new THREE.Vector3(vec3.x, scope.target.y, vec3.z);
                 var delta = scope.target.clone().sub(newTarget);
                 pan.sub(delta);
                 scope.update();
             };
-            this.rotateLeft = function(angle) {
+            this.rotateLeft = function (angle) {
                 if (angle === undefined) {
                     angle = getAutoRotationAngle();
                 }
                 thetaDelta -= angle;
             };
-            this.rotateUp = function(angle) {
+            this.rotateUp = function (angle) {
                 if (angle === undefined) {
                     angle = getAutoRotationAngle();
                 }
                 phiDelta -= angle;
             };
             // pass in distance in world space to move left
-            this.panLeft = function(distance) {
+            this.panLeft = function (distance) {
                 var panOffset = new THREE.Vector3();
                 var te = this.object.matrix.elements;
                 // get X column of matrix
@@ -4049,7 +4078,7 @@ var BP3D;
                 pan.add(panOffset);
             };
             // pass in distance in world space to move up
-            this.panUp = function(distance) {
+            this.panUp = function (distance) {
                 var panOffset = new THREE.Vector3();
                 var te = this.object.matrix.elements;
                 // get Y column of matrix
@@ -4060,7 +4089,7 @@ var BP3D;
             };
             // main entry point; pass in Vector2 of change desired in pixel space,
             // right and down are positive
-            this.pan = function(delta) {
+            this.pan = function (delta) {
                 var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
                 if (scope.object.fov !== undefined) {
                     // perspective
@@ -4072,32 +4101,34 @@ var BP3D;
                     // we actually don't use screenWidth, since perspective camera is fixed to screen height
                     scope.panLeft(2 * delta.x * targetDistance / element.clientHeight);
                     scope.panUp(2 * delta.y * targetDistance / element.clientHeight);
-                } else if (scope.object.top !== undefined) {
+                }
+                else if (scope.object.top !== undefined) {
                     // orthographic
                     scope.panLeft(delta.x * (scope.object.right - scope.object.left) / element.clientWidth);
                     scope.panUp(delta.y * (scope.object.top - scope.object.bottom) / element.clientHeight);
-                } else {
+                }
+                else {
                     // camera neither orthographic or perspective - warn user
                     console.warn('WARNING: OrbitControls.js encountered an unknown camera type - pan disabled.');
                 }
                 scope.update();
             };
-            this.panXY = function(x, y) {
+            this.panXY = function (x, y) {
                 scope.pan(new THREE.Vector2(x, y));
             };
-            this.dollyIn = function(dollyScale) {
+            this.dollyIn = function (dollyScale) {
                 if (dollyScale === undefined) {
                     dollyScale = getZoomScale();
                 }
                 scale /= dollyScale;
             };
-            this.dollyOut = function(dollyScale) {
+            this.dollyOut = function (dollyScale) {
                 if (dollyScale === undefined) {
                     dollyScale = getZoomScale();
                 }
                 scale *= dollyScale;
             };
-            this.update = function() {
+            this.update = function () {
                 var position = this.object.position;
                 var offset = position.clone().sub(this.target);
                 // angle from z-axis around y-axis
@@ -4130,15 +4161,12 @@ var BP3D;
                 this.cameraMovedCallbacks.fire();
                 this.needsUpdate = true;
             };
-
             function getAutoRotationAngle() {
                 return 2 * Math.PI / 60 / 60 * scope.autoRotateSpeed;
             }
-
             function getZoomScale() {
                 return Math.pow(0.95, scope.zoomSpeed);
             }
-
             function onMouseDown(event) {
                 if (scope.enabled === false) {
                     return;
@@ -4150,13 +4178,15 @@ var BP3D;
                     }
                     state = STATE.ROTATE;
                     rotateStart.set(event.clientX, event.clientY);
-                } else if (event.button === 1) {
+                }
+                else if (event.button === 1) {
                     if (scope.noZoom === true) {
                         return;
                     }
                     state = STATE.DOLLY;
                     dollyStart.set(event.clientX, event.clientY);
-                } else if (event.button === 2) {
+                }
+                else if (event.button === 2) {
                     if (scope.noPan === true) {
                         return;
                     }
@@ -4167,7 +4197,6 @@ var BP3D;
                 scope.domElement.addEventListener('mousemove', onMouseMove, false);
                 scope.domElement.addEventListener('mouseup', onMouseUp, false);
             }
-
             function onMouseMove(event) {
                 if (scope.enabled === false)
                     return;
@@ -4183,18 +4212,21 @@ var BP3D;
                     // rotating up and down along whole screen attempts to go 360, but limited to 180
                     scope.rotateUp(2 * Math.PI * rotateDelta.y / element.clientHeight * scope.rotateSpeed);
                     rotateStart.copy(rotateEnd);
-                } else if (state === STATE.DOLLY) {
+                }
+                else if (state === STATE.DOLLY) {
                     if (scope.noZoom === true)
                         return;
                     dollyEnd.set(event.clientX, event.clientY);
                     dollyDelta.subVectors(dollyEnd, dollyStart);
                     if (dollyDelta.y > 0) {
                         scope.dollyIn();
-                    } else {
+                    }
+                    else {
                         scope.dollyOut();
                     }
                     dollyStart.copy(dollyEnd);
-                } else if (state === STATE.PAN) {
+                }
+                else if (state === STATE.PAN) {
                     if (scope.noPan === true)
                         return;
                     panEnd.set(event.clientX, event.clientY);
@@ -4205,7 +4237,6 @@ var BP3D;
                 // Greggman fix: https://github.com/greggman/three.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
                 scope.update();
             }
-
             function onMouseUp() {
                 if (scope.enabled === false)
                     return;
@@ -4214,24 +4245,24 @@ var BP3D;
                 scope.domElement.removeEventListener('mouseup', onMouseUp, false);
                 state = STATE.NONE;
             }
-
             function onMouseWheel(event) {
                 if (scope.enabled === false || scope.noZoom === true)
                     return;
                 var delta = 0;
                 if (event.wheelDelta) {
                     delta = event.wheelDelta;
-                } else if (event.detail) {
+                }
+                else if (event.detail) {
                     delta = -event.detail;
                 }
                 if (delta > 0) {
                     scope.dollyOut();
-                } else {
+                }
+                else {
                     scope.dollyIn();
                 }
                 scope.update();
             }
-
             function onKeyDown(event) {
                 if (scope.enabled === false) {
                     return;
@@ -4257,7 +4288,6 @@ var BP3D;
                         break;
                 }
             }
-
             function touchstart(event) {
                 if (scope.enabled === false) {
                     return;
@@ -4291,7 +4321,6 @@ var BP3D;
                         state = STATE.NONE;
                 }
             }
-
             function touchmove(event) {
                 if (scope.enabled === false) {
                     return;
@@ -4329,7 +4358,8 @@ var BP3D;
                         dollyDelta.subVectors(dollyEnd, dollyStart);
                         if (dollyDelta.y > 0) {
                             scope.dollyOut();
-                        } else {
+                        }
+                        else {
                             scope.dollyIn();
                         }
                         dollyStart.copy(dollyEnd);
@@ -4350,14 +4380,13 @@ var BP3D;
                         state = STATE.NONE;
                 }
             }
-
             function touchend() {
                 if (scope.enabled === false) {
                     return;
                 }
                 state = STATE.NONE;
             }
-            this.domElement.addEventListener('contextmenu', function(event) { event.preventDefault(); }, false);
+            this.domElement.addEventListener('contextmenu', function (event) { event.preventDefault(); }, false);
             this.domElement.addEventListener('mousedown', onMouseDown, false);
             this.domElement.addEventListener('mousewheel', onMouseWheel, false);
             this.domElement.addEventListener('DOMMouseScroll', onMouseWheel, false); // firefox
@@ -4371,13 +4400,13 @@ var BP3D;
 /// <reference path="../../lib/three.d.ts" />
 /// <reference path="../core/utils.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Three;
-    (function(Three) {
+    (function (Three) {
         /**
          * Drawings on "top" of the scene. e.g. rotate arrows
          */
-        Three.HUD = function(three) {
+        Three.HUD = function (three) {
             var scope = this;
             var three = three;
             var scene = new THREE.Scene();
@@ -4390,18 +4419,16 @@ var BP3D;
             var color = "#ffffff";
             var hoverColor = "#f1c40f";
             var activeObject = null;
-            this.getScene = function() {
+            this.getScene = function () {
                 return scene;
             };
-            this.getObject = function() {
+            this.getObject = function () {
                 return activeObject;
             };
-
             function init() {
                 three.itemSelectedCallbacks.add(itemSelected);
                 three.itemUnselectedCallbacks.add(itemUnselected);
             }
-
             function resetSelectedItem() {
                 selectedItem = null;
                 if (activeObject) {
@@ -4409,7 +4436,6 @@ var BP3D;
                     activeObject = null;
                 }
             }
-
             function itemSelected(item) {
                 if (selectedItem != item) {
                     resetSelectedItem();
@@ -4420,50 +4446,44 @@ var BP3D;
                     }
                 }
             }
-
             function itemUnselected() {
                 resetSelectedItem();
             }
-            this.setRotating = function(isRotating) {
+            this.setRotating = function (isRotating) {
                 rotating = isRotating;
                 setColor();
             };
-            this.setMouseover = function(isMousedOver) {
+            this.setMouseover = function (isMousedOver) {
                 mouseover = isMousedOver;
                 setColor();
             };
-
             function setColor() {
                 if (activeObject) {
-                    activeObject.children.forEach(function(obj) {
+                    activeObject.children.forEach(function (obj) {
                         obj.material.color.set(getColor());
                     });
                 }
                 three.needsUpdate();
             }
-
             function getColor() {
                 return (mouseover || rotating) ? hoverColor : color;
             }
-            this.update = function() {
+            this.update = function () {
                 if (activeObject) {
                     activeObject.rotation.y = selectedItem.rotation.y;
                     activeObject.position.x = selectedItem.position.x;
                     activeObject.position.z = selectedItem.position.z;
                 }
             };
-
             function makeLineGeometry(item) {
                 var geometry = new THREE.Geometry();
                 geometry.vertices.push(new THREE.Vector3(0, 0, 0), rotateVector(item));
                 return geometry;
             }
-
             function rotateVector(item) {
                 var vec = new THREE.Vector3(0, 0, Math.max(item.halfSize.x, item.halfSize.z) + 1.4 + distance);
                 return vec;
             }
-
             function makeLineMaterial(rotating) {
                 var mat = new THREE.LineBasicMaterial({
                     color: getColor(),
@@ -4471,7 +4491,6 @@ var BP3D;
                 });
                 return mat;
             }
-
             function makeCone(item) {
                 var coneGeo = new THREE.CylinderGeometry(5, 0, 10);
                 var coneMat = new THREE.MeshBasicMaterial({
@@ -4482,7 +4501,6 @@ var BP3D;
                 cone.rotation.x = -Math.PI / 2.0;
                 return cone;
             }
-
             function makeSphere(item) {
                 var geometry = new THREE.SphereGeometry(4, 16, 16);
                 var material = new THREE.MeshBasicMaterial({
@@ -4491,7 +4509,6 @@ var BP3D;
                 var sphere = new THREE.Mesh(geometry, material);
                 return sphere;
             }
-
             function makeObject(item) {
                 var object = new THREE.Object3D();
                 var line = new THREE.Line(makeLineGeometry(item), makeLineMaterial(scope.rotating), THREE.LinePieces);
@@ -4519,10 +4536,10 @@ var BP3D;
 /// <reference path="controls.ts" />
 /// <reference path="hud.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Three;
-    (function(Three) {
-        Three.Main = function(model, element, canvasElement, opts) {
+    (function (Three) {
+        Three.Main = function (model, element, canvasElement, opts) {
             var scope = this;
             var options = {
                 resize: true,
@@ -4564,7 +4581,6 @@ var BP3D;
             this.wallClicked = $.Callbacks(); // wall
             this.floorClicked = $.Callbacks(); // floor
             this.nothingClicked = $.Callbacks();
-
             function init() {
                 THREE.ImageUtils.crossOrigin = "";
                 domElement = scope.element.get(0); // Container
@@ -4593,16 +4609,15 @@ var BP3D;
                 var lights = new Three.Lights(scene, model.floorplan);
                 floorplan = new Three.Floorplan(scene, model.floorplan, scope.controls);
                 animate();
-                scope.element.mouseenter(function() {
+                scope.element.mouseenter(function () {
                     mouseOver = true;
-                }).mouseleave(function() {
+                }).mouseleave(function () {
                     mouseOver = false;
-                }).click(function() {
+                }).click(function () {
                     hasClicked = true;
                 });
                 //canvas = new ThreeCanvas(canvasElement, scope);
             }
-
             function spin() {
                 if (options.spin && !mouseOver && !hasClicked) {
                     var theta = 2 * Math.PI * options.spinSpeed * (Date.now() - lastRender);
@@ -4610,32 +4625,31 @@ var BP3D;
                     scope.controls.update();
                 }
             }
-            this.dataUrl = function() {
+            this.dataUrl = function () {
                 var dataUrl = renderer.domElement.toDataURL("image/png");
                 return dataUrl;
             };
-            this.stopSpin = function() {
+            this.stopSpin = function () {
                 hasClicked = true;
             };
-            this.options = function() {
+            this.options = function () {
                 return options;
             };
-            this.getModel = function() {
+            this.getModel = function () {
                 return model;
             };
-            this.getScene = function() {
+            this.getScene = function () {
                 return scene;
             };
-            this.getController = function() {
+            this.getController = function () {
                 return controller;
             };
-            this.getCamera = function() {
+            this.getCamera = function () {
                 return camera;
             };
-            this.needsUpdate = function() {
+            this.needsUpdate = function () {
                 needsUpdate = true;
             };
-
             function shouldRender() {
                 // Do we need to draw a new frame
                 if (scope.controls.needsUpdate || controller.needsUpdate || needsUpdate || model.scene.needsUpdate) {
@@ -4644,11 +4658,11 @@ var BP3D;
                     needsUpdate = false;
                     model.scene.needsUpdate = false;
                     return true;
-                } else {
+                }
+                else {
                     return false;
                 }
             }
-
             function render() {
                 spin();
                 if (shouldRender()) {
@@ -4658,31 +4672,33 @@ var BP3D;
                     renderer.render(hud.getScene(), camera);
                 }
                 lastRender = Date.now();
-            };
-
+            }
+            ;
             function animate() {
                 var delay = 50;
-                setTimeout(function() {
+                setTimeout(function () {
                     requestAnimationFrame(animate);
                 }, delay);
                 render();
-            };
-            this.rotatePressed = function() {
+            }
+            ;
+            this.rotatePressed = function () {
                 controller.rotatePressed();
             };
-            this.rotateReleased = function() {
+            this.rotateReleased = function () {
                 controller.rotateReleased();
             };
-            this.setCursorStyle = function(cursorStyle) {
+            this.setCursorStyle = function (cursorStyle) {
                 domElement.style.cursor = cursorStyle;
             };
-            this.updateWindowSize = function() {
+            this.updateWindowSize = function () {
                 scope.heightMargin = scope.element.offset().top;
                 scope.widthMargin = scope.element.offset().left;
                 scope.elementWidth = scope.element.innerWidth();
                 if (options.resize) {
                     scope.elementHeight = window.innerHeight - scope.heightMargin;
-                } else {
+                }
+                else {
                     scope.elementHeight = scope.element.innerHeight();
                 }
                 camera.aspect = scope.elementWidth / scope.elementHeight;
@@ -4690,7 +4706,7 @@ var BP3D;
                 renderer.setSize(scope.elementWidth, scope.elementHeight);
                 needsUpdate = true;
             };
-            this.centerCamera = function() {
+            this.centerCamera = function () {
                 var yOffset = 150.0;
                 var pan = model.floorplan.getCenter();
                 pan.y = yOffset;
@@ -4703,7 +4719,7 @@ var BP3D;
             };
             // projects the object's center point into x,y screen coords
             // x,y are relative to top left corner of viewer
-            this.projectVector = function(vec3, ignoreMargin) {
+            this.projectVector = function (vec3, ignoreMargin) {
                 ignoreMargin = ignoreMargin || false;
                 var widthHalf = scope.elementWidth / 2;
                 var heightHalf = scope.elementHeight / 2;
@@ -4727,9 +4743,9 @@ var BP3D;
 /// <reference path="floorplanner/floorplanner.ts" />
 /// <reference path="three/main.ts" />
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     /** Blueprint3D core application. */
-    var Blueprint3d = (function() {
+    var Blueprint3d = (function () {
         /** Creates an instance.
          * @param options The initialization options.
          */
@@ -4738,7 +4754,8 @@ var BP3D;
             this.three = new BP3D.Three.Main(this.model, options.threeElement, options.threeCanvasElement, {});
             if (!options.widget) {
                 this.floorplanner = new BP3D.Floorplanner.Floorplanner(options.floorplannerElement, this.model.floorplan);
-            } else {
+            }
+            else {
                 this.three.getController().enabled = false;
             }
         }
@@ -4747,11 +4764,11 @@ var BP3D;
     BP3D.Blueprint3d = Blueprint3d;
 })(BP3D || (BP3D = {}));
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Core;
-    (function(Core) {
+    (function (Core) {
         /** Enumeration of log contexts. */
-        (function(ELogContext) {
+        (function (ELogContext) {
             /** Log nothing. */
             ELogContext[ELogContext["None"] = 0] = "None";
             /** Log all. */
@@ -4767,7 +4784,7 @@ var BP3D;
         })(Core.ELogContext || (Core.ELogContext = {}));
         var ELogContext = Core.ELogContext;
         /** Enumeration of log levels. */
-        (function(ELogLevel) {
+        (function (ELogLevel) {
             /** An information. */
             ELogLevel[ELogLevel["Information"] = 0] = "Information";
             /** A warning. */
@@ -4789,9 +4806,9 @@ var BP3D;
          * @returns If this context/levels is currently logged.
          */
         function isLogging(context, level) {
-            return Core.logContext === ELogContext.All || Core.logContext == context ||
-                level === ELogLevel.Warning || level === ELogLevel.Error ||
-                level === ELogLevel.Fatal;
+            return Core.logContext === ELogContext.All || Core.logContext == context
+                || level === ELogLevel.Warning || level === ELogLevel.Error
+                || level === ELogLevel.Fatal;
         }
         Core.isLogging = isLogging;
         /** Log the passed message in the context and with given level.
@@ -4827,18 +4844,19 @@ var BP3D;
     })(Core = BP3D.Core || (BP3D.Core = {}));
 })(BP3D || (BP3D = {}));
 var BP3D;
-(function(BP3D) {
+(function (BP3D) {
     var Core;
-    (function(Core) {
+    (function (Core) {
         /** Version information. */
-        var Version = (function() {
-            function Version() {}
+        var Version = (function () {
+            function Version() {
+            }
             /** The informal version. */
-            Version.getInformalVersion = function() {
+            Version.getInformalVersion = function () {
                 return "1.0 Beta 1";
             };
             /** The technical version. */
-            Version.getTechnicalVersion = function() {
+            Version.getTechnicalVersion = function () {
                 return "1.0.0.1";
             };
             return Version;
@@ -4846,6 +4864,6 @@ var BP3D;
         Core.Version = Version;
     })(Core = BP3D.Core || (BP3D.Core = {}));
 })(BP3D || (BP3D = {}));
-console.log("Blueprint3D " + BP3D.Core.Version.getInformalVersion() +
-    " (" + BP3D.Core.Version.getTechnicalVersion() + ")");
+console.log("Blueprint3D " + BP3D.Core.Version.getInformalVersion()
+    + " (" + BP3D.Core.Version.getTechnicalVersion() + ")");
 //# sourceMappingURL=blueprint3d.js.map
