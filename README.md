@@ -1,8 +1,8 @@
--## See it
- -
- -This repository includes an example application built using blueprint3d:
- -
- -### http://furnishup.github.io/blueprint3d/example/
+See it
+
+This repository includes an example application built using blueprint3d:
+
+http://furnishup.github.io/blueprint3d/example/
  -
 
 ## What is this?
